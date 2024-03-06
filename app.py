@@ -19,6 +19,15 @@ SERVER = 'localhost'
 DB = 'db_sard'
 
 SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
+
+# USERNAME = 'admin'
+# PASSWORD = 'raos481050'
+# SERVER = 'rds-sard.czgatsoo6uc5.sa-east-1.rds.amazonaws.com:3306'
+# DB = 'rds_sard'
+# SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
+
+
+
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 SECRET_KEY = "5516500a750bfc88c0832fab"
 BABEL_DEFAULT_LOCALE = 'pt'
@@ -35,6 +44,12 @@ class Estoque(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subtarefa = db.Column(db.Integer, nullable=True)
     especie = db.Column(db.Integer, nullable=True)
+    situacao = db.Column(db.String(50), nullable=True)
+    status = db.Column(db.String(300), nullable=True)
+
+class Instrucao(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    subtarefa = db.Column(db.Integer, nullable=True)
     status = db.Column(db.String(300), nullable=True)
 
 class Solicitacoes(db.Model):
@@ -60,11 +75,13 @@ def index():
     return redirect(url_for('registrar'))
 
 
-@app.route('/solicitacoes')
-def solicitacoes():
-    todas_solicitacoes = Solicitacoes.query.all()
-    print(todas_solicitacoes.count())
-    return render_template('base.html', solicitacoes=todas_solicitacoes)
+# @app.route('/solicitacoes')
+# def solicitacoes():
+#     page = request.args.get('page', 1, type=int)
+#     per_page = 10  # Definir o número de itens por página
+#     todas_solicitacoes = Solicitacoes.query.paginate(page=page, per_page=per_page, error_out=False)
+#     return render_template('base.html', solicitacoes=todas_solicitacoes)
+
 
 @app.route('/registrar', methods=['GET', 'POST'])
 def registrar():
@@ -88,7 +105,9 @@ def registrar():
             # Trate o erro conforme necessário
             print(e)
         return redirect(url_for('registrar'))
-    todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).all()
+
+    # todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).all()
+    todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).limit(100).all()
     status_mais_recente = StatusAPI.query.order_by(StatusAPI.id.desc()).first()
     return render_template('registrar.html', solicitacoes=todas_solicitacoes,status_api=status_mais_recente)
 
@@ -98,6 +117,21 @@ def dados_grafico_estoque():
     tarefas_nao_distribuidas = Estoque.query.filter(Estoque.status == None).count()
 
     labels = ['Tarefas Distribuídas', 'Tarefas Não Distribuídas']
+    values = [tarefas_distribuidas, tarefas_nao_distribuidas]
+
+    data = {
+        'labels': labels,
+        'values': values,
+    }
+    return jsonify(data)
+
+
+@app.route('/dados-grafico-estoque-instrucao')
+def dados_grafico_estoque_instrucao():
+    tarefas_distribuidas = Instrucao.query.filter(Instrucao.status != None).count()
+    tarefas_nao_distribuidas = Instrucao.query.filter(Instrucao.status == None).count()
+
+    labels = ['Tarefas de Instrução Distribuídas', 'Tarefas Não Distribuídas']
     values = [tarefas_distribuidas, tarefas_nao_distribuidas]
 
     data = {

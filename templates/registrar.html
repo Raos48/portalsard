@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
 
 <style>
     .hidden {
@@ -74,6 +76,19 @@ body {
                 <div class="p-4">
                     <form id="registrarSolicitacao" method="POST" class="space-y-4">
                         <div>
+                            <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                            <select id="tipo" name="tipo" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="">Selecione uma opção</option>
+                                <option value="Solicitar Tarefas BI">Solicitar Tarefas BI</option>
+                                <option value="Solicitar Tarefas de Análise de Acordão">Solicitar Tarefas de Análise de Acordão</option>
+                                <option value="Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO">Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO</option>
+                                <option value="Solicitar Tarefas de Instrução de Recurso">Solicitar Tarefas de Instrução de Recurso</option>
+                                <option value="Transferir tarefa">Transferir tarefa</option>
+                                <option value="Excluir responsável">Excluir responsável</option>
+                                <option value="Atribuir responsável">Atribuir responsável</option>
+                            </select>
+                        </div>
+                        <div class="hidden">
                             <label for="protocolo" class="block text-sm font-medium text-gray-700">Protocolo</label>
                             <input type="text" id="protocolo" name="protocolo" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
@@ -81,26 +96,15 @@ body {
                             <label for="solicitante" class="block text-sm font-medium text-gray-700">Siape solicitante</label>
                             <input type="text" id="solicitante" name="solicitante" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
-                        <div>
-                            <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
-                            <select id="tipo" name="tipo" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="">Selecione uma opção</option>
-                                <option value="Transferir tarefa">Transferir tarefa</option>
-                                <option value="Solicitar Tarefas BI">Solicitar Tarefas BI</option>
-                                <option value="Solicitar Tarefas de Análise de Acordão">Solicitar Tarefas de Análise de Acordão</option>
-                                <option value="Excluir responsável">Excluir responsável</option>
-                                <option value="Atribuir responsável">Atribuir responsável</option>
-                            </select>
-                        </div>
-                        <div>
+                        <div class="hidden">
                             <label for="matricula" class="block text-sm font-medium text-gray-700">Matrícula</label>
                             <input type="text" id="matricula" name="matricula" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
-                        <div>
+                        <div class="hidden">
                             <label for="especie" class="block text-sm font-medium text-gray-700">Cód. Espécie</label>
                             <input type="text" id="especie" name="especie" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
-                        <div>
+                        <div class="hidden">
                             <label for="unidade" class="block text-sm font-medium text-gray-700">Unidade</label>
                             <input type="text" id="unidade" name="unidade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
@@ -121,9 +125,18 @@ body {
         </div>
     </div>
 
+<div class="container mt-2 rounded mb-2">
+    <div class="row">
+        <div class="grafico col-md-6 bg-white shadow-md rounded-lg mr-1" id="grafico-estoque"></div>
+        <div class="grafico col-md-6 bg-white shadow-md rounded-lg mr-1" id="grafico-estoque-instrucao"></div>
+    </div>
+    <div>
+    </div>
+</div>
+    <div class="grafico mt-2 col-md-12 bg-white shadow-md rounded-lg" id="grafico-estoque-especie"></div>
+
+
 <div class="graficos-container mt-5">
-    <div class="grafico bg-white shadow-md rounded-lg" id="grafico-estoque"></div>
-    <div class="grafico bg-white shadow-md rounded-lg" id="grafico-estoque-especie"></div>
 </div>
 
 </div>
@@ -170,70 +183,74 @@ body {
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Adiciona a classe 'hidden' aos campos "Protocolo", "Matrícula" e "Espécie" inicialmente
+        document.getElementById('protocolo').parentNode.classList.add('hidden');
+        document.getElementById('matricula').parentNode.classList.add('hidden');
+        document.getElementById('especie').parentNode.classList.add('hidden'); // Adiciona a classe hidden ao campo "Espécie"
+
         var tipoSelect = document.getElementById('tipo');
-        var matriculaDiv = document.querySelector('label[for="matricula"]').parentNode;
-        var unidadeDiv = document.querySelector('label[for="unidade"]').parentNode;
-        var especieDiv = document.querySelector('label[for="especie"]').parentNode;
         var protocoloInput = document.getElementById('protocolo');
+        var matriculaInput = document.getElementById('matricula');
+        var especieInput = document.getElementById('especie'); // Referência ao campo "Espécie"
 
-        // Inicialmente oculta os campos
-        matriculaDiv.classList.add('hidden');
-        unidadeDiv.classList.add('hidden');
-        especieDiv.classList.add('hidden');
+        // Função para mostrar ou ocultar os campos "Protocolo", "Matrícula" e "Espécie" com base na opção selecionada
+        function toggleFields(selectedOption) {
+            if (selectedOption === 'Transferir tarefa' || selectedOption === 'Excluir responsável' || selectedOption === 'Atribuir responsável') {
+                protocoloInput.parentNode.classList.remove('hidden');
+            } else {
+                protocoloInput.parentNode.classList.add('hidden');
+            }
 
-
-        tipoSelect.addEventListener('change', function() {
-            var selectedOption = this.value;
-
-            protocoloInput.disabled = selectedOption === 'Solicitar Tarefas BI';
-
-            // Mostra/oculta o campo Matrícula
             if (selectedOption === 'Atribuir responsável') {
-                matriculaDiv.classList.remove('hidden');
+                matriculaInput.parentNode.classList.remove('hidden');
             } else {
-                matriculaDiv.classList.add('hidden');
+                matriculaInput.parentNode.classList.add('hidden');
             }
 
-            // Mostra/oculta o campo Unidade
-            if (selectedOption === 'Transferir tarefa') {
-                unidadeDiv.classList.remove('hidden');
-            } else {
-                unidadeDiv.classList.add('hidden');
-            }
-
-
-            // Mostra/oculta o campo Especie
+            // Mostra o campo "Espécie" apenas quando "Solicitar Tarefas de Análise de Acordão" é selecionado
             if (selectedOption === 'Solicitar Tarefas de Análise de Acordão') {
-                especieDiv.classList.remove('hidden');
+                especieInput.parentNode.classList.remove('hidden');
             } else {
-                especieDiv.classList.add('hidden');
+                especieInput.parentNode.classList.add('hidden');
             }
+        }
 
-        protocoloInput.disabled = selectedOption === 'Solicitar Tarefas BI' || selectedOption === 'Solicitar Tarefas de Análise de Acordão';
-
+        // Adiciona um evento de mudança ao campo "Tipo"
+        tipoSelect.addEventListener('change', function() {
+            toggleFields(this.value);
         });
-    });
 
-        document.addEventListener('DOMContentLoaded', function() {
-        fetch('/dados-grafico-estoque')
-            .then(response => response.json())
-            .then(data => {
-                var data = [{
-                    values: data.values,
-                    labels: data.labels,
-                    type: 'pie'
-                }];
-
-                var layout = {
-                    title: "Tarefas de Análise de Acordão Distribuídas vs. Não Distribuídas",
-                };
-
-                var config = {displayModeBar: false}; // Configuração para omitir a barra de ferramentas
-
-                Plotly.newPlot('grafico-estoque', data, layout, config);
-            });
+        // Chama a função para garantir que os campos "Protocolo", "Matrícula" e "Espécie" sejam exibidos ou ocultos corretamente ao carregar a página
+        toggleFields(tipoSelect.value);
     });
 </script>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Função modular para carregar dados do gráfico
+        function loadGraphData(endpoint, elementId, title, colors) {
+            fetch(endpoint)
+            .then(response => response.json())
+            .then(data => {
+                var plotData = [{ values: data.values, labels: data.labels, type: 'pie', marker: { colors: colors } }];
+                var layout = { title: title };
+                var config = { displayModeBar: false };
+                Plotly.newPlot(elementId, plotData, layout, config);
+            });
+        }
+
+        // Carregar dados dos gráficos
+        loadGraphData('/dados-grafico-estoque-instrucao', 'grafico-estoque-instrucao', "Tarefas de Instrução de Recurso Distribuídas vs. Não Distribuídas", ['#17b324', '#b31777']); // Rosa e verde
+        loadGraphData('/dados-grafico-estoque', 'grafico-estoque', "Tarefas de Análise de Acordão Distribuídas vs. Não Distribuídas");
+        // Continuar com o restante dos gráficos conforme necessário
+    });
+</script>
+
+
 
 
 <script>
@@ -271,7 +288,7 @@ body {
                 yaxis: {
                     title: 'Quantidade'
                 },
-                title: 'Distribuição de Tarefas por Espécie'
+                title: 'Distribuição de Tarefas Análise de Acordão por Espécie'
             };
             var config = {displayModeBar: false};
             Plotly.newPlot('grafico-estoque-especie', [trace1, trace2], layout, config);

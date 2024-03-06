@@ -30,54 +30,56 @@ class TokenFetcher:
         except Exception as e:
             print(f"Erro ao carregar headers: {e}")
 
-        requisicao = requests.get("https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/888296716",
-                                  verify=False, headers=self.headers)
-        if requisicao.status_code != 200:
-            print(f"Erro na requisição. Código de status: {requisicao.status_code}")
-            print(f"API Offline - Data e hora: {current_time}")
-            options = webdriver.ChromeOptions()
-            options.add_argument('--ignore-certificate-errors-spki-list')
-            options.add_argument('--ignore-ssl-errors')
-            options.add_argument("--log-level=3")
-            options.add_argument("--disable-logging")
-            options.page_load_strategy = 'normal'
-            programa_pasta_raiz = os.path.dirname(os.path.abspath(__file__))
-            os.environ["PATH"] += os.pathsep + programa_pasta_raiz
-            driver = webdriver.Chrome(options=options)
-            driver.maximize_window()
-            driver.get("https://www-atendimento/")
-            driver.implicitly_wait(10)
-            driver.find_element(By.ID, "details-button").click()
-            driver.find_element(By.ID, "proceed-link").click()
+        try:
+            requisicao = requests.get("https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/888296716",verify=False, headers=self.headers)
+            if requisicao.status_code != 200:
+                print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                print(f"API Offline - Data e hora: {current_time}")
+                options = webdriver.ChromeOptions()
+                options.add_argument('--ignore-certificate-errors-spki-list')
+                options.add_argument('--ignore-ssl-errors')
+                options.add_argument("--log-level=3")
+                options.add_argument("--disable-logging")
+                options.page_load_strategy = 'normal'
+                programa_pasta_raiz = os.path.dirname(os.path.abspath(__file__))
+                os.environ["PATH"] += os.pathsep + programa_pasta_raiz
+                driver = webdriver.Chrome(options=options)
+                driver.maximize_window()
+                driver.get("https://www-atendimento/")
+                driver.implicitly_wait(10)
+                driver.find_element(By.ID, "details-button").click()
+                driver.find_element(By.ID, "proceed-link").click()
 
-            time.sleep(3)
-            print()
-            print("Robô para Distribuição de Tarefas.")
-            print()
-            print("Aguardando Login no sistema PAT...")
-            print()
-            time.sleep(3)
-            wait = WebDriverWait(driver, 120)  # Aguarda até 10 segundos
-            element = wait.until(
-                EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[2]/div/header/div[1]/span")))
-            for i in range(30, 0, -1):
-                print(f"Aguardando: {i} segundos")
-                time.sleep(1)
-            print("Tempo encerrado!")
-            js_script = "return localStorage.getItem('ifs_auth');"
-            js_script2 = "return localStorage.getItem('srv_auth');"
-            resultado = driver.execute_script(js_script)
-            token = driver.execute_script(js_script2)
-            urllib3.disable_warnings()
-            self.headers = {'Authorization': 'Bearer ' + resultado, 'Content-type': 'application/json',
-                            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
-                            'tokenservidor': token, 'Accept': 'application/json'}
-            driver.quit()
-            with open('headers.txt', 'w') as file:
-                file.write(json.dumps(self.headers))
-            return self.headers
-        else:
-            print(f"API Online - Data e hora: {current_time}")
+                time.sleep(3)
+                print()
+                print("Robô para Distribuição de Tarefas.")
+                print()
+                print("Aguardando Login no sistema PAT...")
+                print()
+                time.sleep(3)
+                wait = WebDriverWait(driver, 120)  # Aguarda até 10 segundos
+                element = wait.until(
+                    EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[2]/div/header/div[1]/span")))
+                for i in range(30, 0, -1):
+                    print(f"Aguardando: {i} segundos")
+                    time.sleep(1)
+                print("Tempo encerrado!")
+                js_script = "return localStorage.getItem('ifs_auth');"
+                js_script2 = "return localStorage.getItem('srv_auth');"
+                resultado = driver.execute_script(js_script)
+                token = driver.execute_script(js_script2)
+                urllib3.disable_warnings()
+                self.headers = {'Authorization': 'Bearer ' + resultado, 'Content-type': 'application/json',
+                                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+                                'tokenservidor': token, 'Accept': 'application/json'}
+                driver.quit()
+                with open('headers.txt', 'w') as file:
+                    file.write(json.dumps(self.headers))
+                return self.headers
+            else:
+                print(f"API Online - Data e hora: {current_time}")
+        except Exception as e:
+            print(f"Erro de conexão: {e}")
 
     def verifica_API(self):
         connection = None
@@ -228,147 +230,156 @@ class TokenFetcher:
                                     sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
                                     cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
                                     connection.commit()
-                        else:
-                            sql_query = """
-                            SELECT solicitante
-                            FROM solicitacoes
-                            WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
-                            """
-                            cursor.execute(sql_query)
-                            resultado = cursor.fetchone()
 
-                            #CASO POSSUA TAREFAS de Solicitar BI execute
-                            if resultado:
-                                siape_procurado = resultado[0]
-                                id_responsavel = None
-                                for id_, info in servidores.items():
-                                    if info['SIAPE'] == siape_procurado:
-                                        id_responsavel = str(id_)
-                                        break
-                                url = "https://atendimento.inss.gov.br/apis/tarefasApi/profissional/dashboard"
+                        if protocolo is None:
+                            cursor.execute("SELECT tipo FROM solicitacoes WHERE status IS NULL OR status = ''")
+                            tipo = cursor.fetchone()
 
-                                params = {
-                                    "indexVisao": 2,
-                                    "limit": 5,
-                                    "offset": 0,
-                                    "sort_by": "DATA_ENTRADA_REQUERIMENTO",
-                                    "order_by": "ASCENDING"
-                                }
 
-                                data = {
-                                    "status": "PENDENTE_E_CUMPRIMENTO_DE_EXIGENCIA",
-                                    "grupoServicos": [
-                                        {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
-                                    "servicos": [
-                                        {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
-                                         "id": 5473}
-                                    ]
-                                }
+                            if tipo and tipo[0] == "Solicitar Tarefas BI":
+                                sql_query = """
+                                SELECT solicitante
+                                FROM solicitacoes
+                                WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
+                                """
+                                cursor.execute(sql_query)
+                                resultado = cursor.fetchone()
 
-                                # data = {
-                                #     "status": "PENDENTE_E_CUMPRIMENTO_DE_EXIGENCIA",
-                                #     "grupoServicos": [
-                                #         {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
-                                #     "servicos": [
-                                #         {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
-                                #          "id": 5473},
-                                #         {"label": "Auxílio-Doença - Urbano (Acerto Pós-perícia) - TADU",
-                                #          "value": "5474", "id": 5474}
-                                #     ]
-                                # }
-
-                                response = requests.post(url, json=data, headers=self.headers, params=params)
-
-                                if response.status_code == 204:
-                                    try:
-                                        # Prepara a query SQL para selecionar o ID
-                                        sql_query = """
-                                        SELECT id
-                                        FROM solicitacoes
-                                        WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
-                                        """
-                                        cursor.execute(sql_query)
-                                        resultado = cursor.fetchone()
-
-                                        # Verifica se um resultado foi encontrado
-                                        if resultado:
-                                            id_distribuir = resultado[0]
-                                            dt_conclusao = datetime.now()
-                                            status = "Não há tarefas na fila da Unidade Gerencial"
-                                            sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                            cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
-                                            connection.commit()
-                                            print("Distribuição Finalizada")
+                                #CASO POSSUA TAREFAS de Solicitar BI execute
+                                if resultado:
+                                    siape_procurado = resultado[0]
+                                    id_responsavel = None
+                                    for id_, info in servidores.items():
+                                        if info['SIAPE'] == siape_procurado:
+                                            id_responsavel = str(id_)
                                             break
-                                        else:
-                                            print("Nenhuma solicitação correspondente encontrada.")
-                                    except Exception as e:
-                                        print(f"Ocorreu um erro: {e}")
-                                        connection.rollback()
-                                    finally:
-                                        cursor.close()
-                                        connection.close()
-                                        pass
+                                    url = "https://atendimento.inss.gov.br/apis/tarefasApi/profissional/dashboard"
 
-                                response_json = response.json()
-                                protocolos = [item['numeroProtocolo'] for item in response_json]
+                                    params = {
+                                        "indexVisao": 2,
+                                        "limit": 5,
+                                        "offset": 0,
+                                        "sort_by": "DATA_ENTRADA_REQUERIMENTO",
+                                        "order_by": "ASCENDING"
+                                    }
 
-                                for protocolo in protocolos:
-                                    servidor = '{"responsaveis":[{"id":' + id_responsavel + '}]}'
-                                    try:
-                                        requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers)
-                                        if requisicao_get.status_code == 200:
-                                            tarefa = requisicao_get.json()
-                                            responsaveis = tarefa['responsaveis']['responsaveis']
-                                            if len(responsaveis) == 0:
-                                                requisicao = requests.post(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers, data=servidor)
-                                                if requisicao.status_code != 200:
-                                                    print(f"Erro na requisição. Código de status: {requisicao.status_code}")
-                                                    continue
+                                    data = {
+                                        "status": "PENDENTE_E_CUMPRIMENTO_DE_EXIGENCIA",
+                                        "grupoServicos": [
+                                            {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
+                                        "servicos": [
+                                            {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
+                                             "id": 5473}
+                                        ]
+                                    }
+
+                                    # data = {
+                                    #     "status": "PENDENTE_E_CUMPRIMENTO_DE_EXIGENCIA",
+                                    #     "grupoServicos": [
+                                    #         {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
+                                    #     "servicos": [
+                                    #         {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
+                                    #          "id": 5473},
+                                    #         {"label": "Auxílio-Doença - Urbano (Acerto Pós-perícia) - TADU",
+                                    #          "value": "5474", "id": 5474}
+                                    #     ]
+                                    # }
+
+                                    response = requests.post(url, json=data, headers=self.headers, params=params)
+
+                                    if response.status_code == 204:
+                                        try:
+                                            # Prepara a query SQL para selecionar o ID
+                                            sql_query = """
+                                            SELECT id
+                                            FROM solicitacoes
+                                            WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
+                                            """
+                                            cursor.execute(sql_query)
+                                            resultado = cursor.fetchone()
+
+                                            # Verifica se um resultado foi encontrado
+                                            if resultado:
+                                                id_distribuir = resultado[0]
+                                                dt_conclusao = datetime.now()
+                                                status = "Não há tarefas na fila da Unidade Gerencial"
+                                                sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                                cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
+                                                connection.commit()
+                                                print("Não há mais tarefas na fila da Unidade")
+                                                break
                                             else:
-                                                print("Tarefa já possui responsável..")
-                                                pass
-                                        else:
-                                            print("Requisição falhou - looping - tentar novamente.")
-                                            continue
+                                                print("Nenhuma solicitação correspondente encontrada.")
+                                        except Exception as e:
+                                            print(f"Ocorreu um erro: {e}")
+                                            connection.rollback()
+                                        finally:
+                                            cursor.close()
+                                            connection.close()
+                                            pass
+
+                                    response_json = response.json()
+                                    protocolos = [item['numeroProtocolo'] for item in response_json]
+
+                                    for protocolo in protocolos:
+                                        servidor = '{"responsaveis":[{"id":' + id_responsavel + '}]}'
+                                        sucesso = False
+                                        while not sucesso:
+                                            try:
+                                                requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers)
+                                                if requisicao_get.status_code == 200:
+                                                    tarefa = requisicao_get.json()
+                                                    responsaveis = tarefa['responsaveis']['responsaveis']
+                                                    if len(responsaveis) == 0:
+                                                        requisicao = requests.post(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers, data=servidor)
+                                                        if requisicao.status_code != 200:
+                                                            print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                                            sucesso = True
+                                                            continue
+                                                        else:
+                                                            print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                                    else:
+                                                        print("Tarefa já possui responsável..")
+                                                        sucesso = True
+                                                        pass
+                                                else:
+                                                    print("Requisição falhou - looping - tentar novamente.")
+                                                    continue
+                                            except Exception as e:
+                                                print(f"Erro ao fazer a requisição: {e}")
 
                                         tipo = 'Solicitar Tarefas BI'
                                         matricula = siape_procurado
                                         solicitante = siape_procurado
                                         status = "Responsável incluído com sucesso."
 
-
                                         sql_insert = """
                                         INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
                                         VALUES (%s, %s, %s, %s, %s, %s, %s)
                                         """
-
 
                                         valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(), datetime.now())
                                         cursor.execute(sql_insert, valores)
                                         connection.commit()
                                         print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
 
-                                    except requests.exceptions.RequestException as e:
-                                        print(f"Erro: {e}")
-                                #Finalizou Distribuição
-                                sql_query = """
-                                SELECT id
-                                FROM solicitacoes
-                                WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
-                                """
-                                cursor.execute(sql_query)
-                                resultado = cursor.fetchone()
-                                id_distribuir = resultado[0]
-                                dt_conclusao = datetime.now()
-                                status = "Tarefas Distribuídas com sucesso."
-                                sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
-                                connection.commit()
-                                print("Distribuição Finalizada")
-                                print()
-                            else:
-                                #Distribuir Análise de Acordão
+                                    #Finalizou Distribuição
+                                    sql_query = """
+                                    SELECT id
+                                    FROM solicitacoes
+                                    WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
+                                    """
+                                    cursor.execute(sql_query)
+                                    resultado = cursor.fetchone()
+                                    id_distribuir = resultado[0]
+                                    dt_conclusao = datetime.now()
+                                    status = "Tarefas Distribuídas com sucesso."
+                                    sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                    cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
+                                    connection.commit()
+                                    print("Distribuição Finalizada")
+                                    print()
+                            if tipo and tipo[0] == "Solicitar Tarefas de Análise de Acordão":
                                 sql_query = """
                                 SELECT solicitante,especie
                                 FROM solicitacoes
@@ -470,6 +481,276 @@ class TokenFetcher:
                                 SELECT id
                                 FROM solicitacoes
                                 WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Análise de Acordão' AND (status IS NULL OR status = '')
+                                """
+                                cursor.execute(sql_query)
+                                resultado = cursor.fetchone()
+                                id_distribuir = resultado[0]
+                                dt_conclusao = datetime.now()
+                                status = "Tarefas Distribuídas com sucesso."
+                                sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
+                                connection.commit()
+                                print("Distribuição Finalizada")
+                                print()
+                            if tipo and tipo[0] == "Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO":
+
+                                # Supondo que `siape_procurado` seja a variável contendo o SIAPE do solicitante em questão
+                                data_hoje = datetime.datetime.now().date()
+
+                                # Ajuste a query para verificar a condição desejada
+                                sql_query_verificacao = """
+                                SELECT COUNT(*)
+                                FROM solicitacoes
+                                WHERE tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO'
+                                AND status = 'Tarefas Distribuídas com sucesso.'
+                                AND solicitante = %s
+                                AND DATE(dt_solicitacao) = %s
+                                """
+                                cursor.execute(sql_query_verificacao, (siape_procurado, data_hoje))
+                                resultado_verificacao = cursor.fetchone()
+
+                                if resultado_verificacao[0] > 0:
+                                    # Caso já exista um registro com as condições especificadas, executar este bloco
+                                    sql_query_distribuicao_finalizada = """
+                                    SELECT id
+                                    FROM solicitacoes
+                                    WHERE protocolo IS NULL
+                                    AND tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO'
+                                    AND (status IS NULL OR status = '')
+                                    AND solicitante = %s
+                                    LIMIT 1
+                                    """
+                                    cursor.execute(sql_query_distribuicao_finalizada, (siape_procurado,))
+                                    resultado_distribuicao = cursor.fetchone()
+
+                                    if resultado_distribuicao:
+                                        id_distribuir, = resultado_distribuicao
+                                        dt_conclusao = datetime.datetime.now()
+                                        status = "Limite de Tarefas Diário de Análise de Acordão Não Provido atingido."
+                                        sql_update_distribuicao = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                        cursor.execute(sql_update_distribuicao, (status, dt_conclusao, id_distribuir))
+                                        connection.commit()
+                                        print("Distribuição Finalizada")
+                                        print()
+                                else:
+                                    sql_query = """
+                                    SELECT solicitante
+                                    FROM solicitacoes
+                                    WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO' AND (status IS NULL OR status = '')
+                                    """
+                                    cursor.execute(sql_query)
+                                    resultado = cursor.fetchone()
+                                    if resultado:
+                                        siape_procurado = resultado[0]
+                                        especie = resultado[1]
+                                    else:
+                                        print("Nenhum resultado encontrado.")
+
+                                    id_responsavel = None
+                                    for id_, info in servidores.items():
+                                        if info['SIAPE'] == siape_procurado:
+                                            id_responsavel = str(id_)
+                                            break
+
+                                    limite = 0
+
+                                    while limite != 5:
+
+                                        sql_query_estoque = """
+                                        SELECT id, subtarefa, situacao
+                                        FROM estoque
+                                        WHERE (status IS NULL OR status = '') AND situacao = 'NÃO PROVIDO'
+                                        LIMIT 1
+                                        """
+
+                                        cursor.execute(sql_query_estoque)
+                                        registro = cursor.fetchone()
+
+                                        if not registro:
+                                            print("Não há tarefas para processar.")
+                                            break
+
+                                        id, subtarefa, situacao = registro
+                                        protocolo = subtarefa
+
+                                        #identificar Unidade
+                                        requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',verify=False, headers=self.headers)
+                                        if requisicao.status_code != 200:
+                                            print(requisicao.text)
+                                            time.sleep(2)
+                                            continue
+                                        tarefa = requisicao.json()
+                                        codigo_unidade = tarefa['codigoUnidade']
+                                        status_tarefa = tarefa['status']
+                                        print(protocolo, codigo_unidade, status_tarefa)
+                                        if status_tarefa != "PENDENTE" and status_tarefa != "CUMPRIMENTO_DE_EXIGENCIA":
+                                            status = "CONCLUÍDA"
+                                            sql_update_estoque = "UPDATE estoque SET status = %s WHERE subtarefa = %s"
+                                            cursor.execute(sql_update_estoque, (status, protocolo))
+                                            connection.commit()
+                                            print(f"tarefa já encontra-se{status_tarefa}")
+                                            time.sleep(2)
+                                            continue
+
+                                        if codigo_unidade == '23150520' or codigo_unidade == '23150513':
+                                            payload = "{'justificativa':'Transferencia para unidade responsavel.'}"
+                                            requisicao = requests.put(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',verify=False, headers=self.headers, data=payload)
+                                            if requisicao.status_code != 200:
+                                                print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                                time.sleep(2)
+                                                continue
+                                            resposta = requisicao.json()
+                                            mensagem = resposta['mensagem']
+                                            print(mensagem)
+
+                                        servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
+                                        url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
+                                        requisicao = requests.post(url_da_api, verify=False, headers=self.headers,data=servidor)
+                                        if requisicao.status_code != 200:
+                                            print(f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
+                                            time.sleep(2)
+                                            continue
+                                        else:
+                                            status = "Responsável incluído com sucesso."
+                                            sql_update_estoque = "UPDATE estoque SET status = %s WHERE subtarefa = %s"
+                                            cursor.execute(sql_update_estoque, (status, protocolo))
+                                            connection.commit()
+                                            matricula = siape_procurado
+                                            solicitante = siape_procurado
+                                            tipo = "Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO"
+                                            sql_insert = """
+                                            INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
+                                            VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                            """
+                                            valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(), datetime.now())
+                                            cursor.execute(sql_insert, valores)
+                                            connection.commit()
+                                            print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                            limite += 1
+
+                                    sql_query = """
+                                    SELECT id
+                                    FROM solicitacoes
+                                    WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO' AND (status IS NULL OR status = '')
+                                    """
+                                    cursor.execute(sql_query)
+                                    resultado = cursor.fetchone()
+                                    id_distribuir = resultado[0]
+                                    dt_conclusao = datetime.now()
+                                    status = "Tarefas Distribuídas com sucesso."
+                                    sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                    cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
+                                    connection.commit()
+                                    print("Distribuição Finalizada")
+                                    print()
+
+                            if tipo and tipo[0] == "Solicitar Tarefas de Instrução de Recurso":
+                                sql_query = """
+                                SELECT solicitante
+                                FROM solicitacoes
+                                WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Instrução de Recurso' AND (status IS NULL OR status = '')
+                                """
+                                cursor.execute(sql_query)
+                                resultado = cursor.fetchone()
+                                if resultado:
+                                    siape_procurado = resultado[0]
+                                else:
+                                    print("Nenhum resultado encontrado.")
+
+                                id_responsavel = None
+                                for id_, info in servidores.items():
+                                    if info['SIAPE'] == siape_procurado:
+                                        id_responsavel = str(id_)
+                                        break
+
+                                limite = 0
+
+                                while limite != 5:
+
+                                    sql_query_instrucao = """
+                                    SELECT id, subtarefa
+                                    FROM instrucao
+                                    WHERE (status IS NULL OR status = '')
+                                    LIMIT 1
+                                    """
+
+                                    cursor.execute(sql_query_instrucao)
+                                    registro = cursor.fetchone()
+
+                                    if not registro:
+                                        print("Não há tarefas para processar.")
+                                        break
+
+                                    id, subtarefa = registro
+                                    protocolo = subtarefa
+
+                                    #identificar Unidade
+                                    requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',verify=False, headers=self.headers)
+                                    if requisicao.status_code != 200:
+                                        print(requisicao.text)
+                                        time.sleep(2)
+                                        continue
+                                    tarefa = requisicao.json()
+                                    codigo_unidade = tarefa['codigoUnidade']
+                                    status_tarefa = tarefa['status']
+                                    print(protocolo, codigo_unidade, status_tarefa)
+                                    if status_tarefa != "PENDENTE" and status_tarefa != "CUMPRIMENTO_DE_EXIGENCIA":
+                                        status = "CONCLUÍDA"
+                                        sql_update_instrucao = "UPDATE instrucao SET status = %s WHERE subtarefa = %s"
+                                        cursor.execute(sql_update_instrucao, (status, protocolo))
+                                        connection.commit()
+                                        print(f"tarefa já encontra-se{status_tarefa}")
+                                        time.sleep(2)
+                                        continue
+
+                                    if codigo_unidade == '23150520' or codigo_unidade == '23150513':
+                                        payload = "{'justificativa':'Transferencia para unidade responsavel.'}"
+                                        requisicao = requests.put(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',verify=False, headers=self.headers, data=payload)
+                                        if requisicao.status_code != 200:
+                                            print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                            time.sleep(2)
+                                            continue
+                                        resposta = requisicao.json()
+                                        mensagem = resposta['mensagem']
+                                        print(mensagem)
+
+                                    if codigo_unidade == '23150515':
+                                        status = "23150515"
+                                        sql_update_instrucao = "UPDATE instrucao SET status = %s WHERE subtarefa = %s"
+                                        cursor.execute(sql_update_instrucao, (status, protocolo))
+                                        connection.commit()
+                                        continue
+
+                                    servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
+                                    url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
+                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,data=servidor)
+                                    if requisicao.status_code != 200:
+                                        print(f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
+                                        time.sleep(2)
+                                        continue
+                                    else:
+                                        status = "Responsável incluído com sucesso."
+                                        sql_update_instrucao = "UPDATE instrucao SET status = %s WHERE subtarefa = %s"
+                                        cursor.execute(sql_update_instrucao, (status, protocolo))
+                                        connection.commit()
+
+                                        matricula = siape_procurado
+                                        solicitante = siape_procurado
+                                        tipo = "Solicitar Tarefas de Instrução de Recurso"
+                                        sql_insert = """
+                                        INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
+                                        VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                        """
+                                        valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(), datetime.now())
+                                        cursor.execute(sql_insert, valores)
+                                        connection.commit()
+                                        print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                        limite += 1
+
+                                sql_query = """
+                                SELECT id
+                                FROM solicitacoes
+                                WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Instrução de Recurso' AND (status IS NULL OR status = '')
                                 """
                                 cursor.execute(sql_query)
                                 resultado = cursor.fetchone()
