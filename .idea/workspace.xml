@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Alteração Link conexão banco de dados para NGROK">
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Trata-se de atualização LAYOUT - registrar.html graficos lado a lado fixos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pat_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/pat_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/registrar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registrar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -169,7 +168,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709743206027</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Trata-se de atualização LAYOUT - registrar.html graficos lado a lado fixos">
+      <option name="closed" value="true" />
+      <created>1709750181887</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1709750181887</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -192,7 +199,8 @@
     <MESSAGE value="Remoção da biblioteca urllib3==1.25.11 do requeriments.txt" />
     <MESSAGE value="Alteração do selenium 4.0 para Selenium 3.141.0" />
     <MESSAGE value="Alteração Link conexão banco de dados para NGROK" />
-    <option name="LAST_COMMIT_MESSAGE" value="Alteração Link conexão banco de dados para NGROK" />
+    <MESSAGE value="Trata-se de atualização LAYOUT - registrar.html graficos lado a lado fixos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Trata-se de atualização LAYOUT - registrar.html graficos lado a lado fixos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -201,16 +209,6 @@
           <url>file://$PROJECT_DIR$/pat_service.py</url>
           <line>319</line>
           <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pat_service.py</url>
-          <line>591</line>
-          <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pat_service.py</url>
-          <line>533</line>
-          <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
