@@ -31,7 +31,8 @@ class TokenFetcher:
             print(f"Erro ao carregar headers: {e}")
 
         try:
-            requisicao = requests.get("https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/888296716",verify=False, headers=self.headers)
+            requisicao = requests.get("https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/888296716",
+                                      verify=False, headers=self.headers)
             if requisicao.status_code != 200:
                 print(f"Erro na requisição. Código de status: {requisicao.status_code}")
                 print(f"API Offline - Data e hora: {current_time}")
@@ -146,7 +147,9 @@ class TokenFetcher:
                             sard_gex_anp = "14409"
 
                             if resposta.status_code == 200:
-                                cursor.execute("SELECT id, protocolo, tipo, matricula, unidade, status, dt_solicitacao, dt_conclusao, solicitante FROM solicitacoes WHERE protocolo = %s AND (status IS NULL OR status = '')",(protocolo,))
+                                cursor.execute(
+                                    "SELECT id, protocolo, tipo, matricula, unidade, status, dt_solicitacao, dt_conclusao, solicitante FROM solicitacoes WHERE protocolo = %s AND (status IS NULL OR status = '')",
+                                    (protocolo,))
                                 resultado = cursor.fetchone()
 
                                 if resultado:
@@ -196,7 +199,9 @@ class TokenFetcher:
                                 print(f"Registro {id_solicitacao} processado com sucesso.")
 
                             elif tipo == 'Excluir responsável':
-                                requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers)
+                                requisicao_get = requests.get(
+                                    f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
+                                    verify=False, headers=self.headers)
                                 if requisicao_get.status_code == 200:
                                     tarefa = requisicao_get.json()
                                     responsaveis = tarefa['responsaveis']['responsaveis']
@@ -204,7 +209,9 @@ class TokenFetcher:
                                     if len(responsaveis) != 0:
                                         for responsavel in responsaveis:
                                             id_responsavel = responsavel['id']
-                                            requisicao_delete = requests.delete(f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',verify=False, headers=self.headers)
+                                            requisicao_delete = requests.delete(
+                                                f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',
+                                                verify=False, headers=self.headers)
                                             if requisicao_delete.status_code == 200:
                                                 print(f"Exclusão do responsável efetuada com sucesso")
                                                 status = "Exclusão do responsável efetuada com sucesso"
@@ -214,7 +221,8 @@ class TokenFetcher:
                                                 connection.commit()
                                                 print(f"Registro {id_solicitacao} processado com sucesso.")
                                             else:
-                                                print(f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
+                                                print(
+                                                    f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
                                     else:
                                         print("Não há responsáveis na tarefa.")
                                         status = "Não há responsáveis na tarefa."
@@ -235,7 +243,6 @@ class TokenFetcher:
                             cursor.execute("SELECT tipo FROM solicitacoes WHERE status IS NULL OR status = ''")
                             tipo = cursor.fetchone()
 
-
                             if tipo and tipo[0] == "Solicitar Tarefas BI":
                                 sql_query = """
                                 SELECT solicitante
@@ -245,7 +252,7 @@ class TokenFetcher:
                                 cursor.execute(sql_query)
                                 resultado = cursor.fetchone()
 
-                                #CASO POSSUA TAREFAS de Solicitar BI execute
+                                # CASO POSSUA TAREFAS de Solicitar BI execute
                                 if resultado:
                                     siape_procurado = resultado[0]
                                     id_responsavel = None
@@ -268,7 +275,8 @@ class TokenFetcher:
                                         "grupoServicos": [
                                             {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
                                         "servicos": [
-                                            {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
+                                            {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR",
+                                             "value": "5473",
                                              "id": 5473}
                                         ]
                                     }
@@ -326,18 +334,24 @@ class TokenFetcher:
                                         sucesso = False
                                         while not sucesso:
                                             try:
-                                                requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers)
+                                                requisicao_get = requests.get(
+                                                    f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
+                                                    verify=False, headers=self.headers)
                                                 if requisicao_get.status_code == 200:
                                                     tarefa = requisicao_get.json()
                                                     responsaveis = tarefa['responsaveis']['responsaveis']
                                                     if len(responsaveis) == 0:
-                                                        requisicao = requests.post(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers, data=servidor)
+                                                        requisicao = requests.post(
+                                                            f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
+                                                            verify=False, headers=self.headers, data=servidor)
                                                         if requisicao.status_code != 200:
-                                                            print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                                            print(
+                                                                f"Erro na requisição. Código de status: {requisicao.status_code}")
                                                             sucesso = True
                                                             continue
                                                         else:
-                                                            print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                                            print(
+                                                                f"Erro na requisição. Código de status: {requisicao.status_code}")
                                                     else:
                                                         print("Tarefa já possui responsável..")
                                                         sucesso = True
@@ -358,12 +372,15 @@ class TokenFetcher:
                                         VALUES (%s, %s, %s, %s, %s, %s, %s)
                                         """
 
-                                        valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(), datetime.now())
+                                        valores = (
+                                            protocolo, matricula, solicitante, tipo, status, datetime.now(),
+                                            datetime.now())
                                         cursor.execute(sql_insert, valores)
                                         connection.commit()
-                                        print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                        print(
+                                            f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
 
-                                    #Finalizou Distribuição
+                                    # Finalizou Distribuição
                                     sql_query = """
                                     SELECT id
                                     FROM solicitacoes
@@ -400,7 +417,6 @@ class TokenFetcher:
                                         id_responsavel = str(id_)
                                         break
 
-
                                 limite = 0
 
                                 while limite != 5:
@@ -412,7 +428,7 @@ class TokenFetcher:
                                     LIMIT 1
                                     """
 
-                                    cursor.execute(sql_query_estoque,(especie,))
+                                    cursor.execute(sql_query_estoque, (especie,))
                                     registro = cursor.fetchone()
 
                                     if not registro:
@@ -422,8 +438,10 @@ class TokenFetcher:
                                     id, subtarefa, especie = registro
                                     protocolo = subtarefa
 
-                                    #identificar Unidade
-                                    requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',verify=False, headers=self.headers)
+                                    # identificar Unidade
+                                    requisicao = requests.get(
+                                        f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
+                                        verify=False, headers=self.headers)
                                     if requisicao.status_code != 200:
                                         print(requisicao.text)
                                         time.sleep(2)
@@ -443,7 +461,9 @@ class TokenFetcher:
 
                                     if codigo_unidade == '23150520' or codigo_unidade == '23150513':
                                         payload = "{'justificativa':'Transferencia para unidade responsavel.'}"
-                                        requisicao = requests.put(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',verify=False, headers=self.headers, data=payload)
+                                        requisicao = requests.put(
+                                            f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',
+                                            verify=False, headers=self.headers, data=payload)
                                         if requisicao.status_code != 200:
                                             print(f"Erro na requisição. Código de status: {requisicao.status_code}")
                                             time.sleep(2)
@@ -454,9 +474,11 @@ class TokenFetcher:
 
                                     servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
                                     url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
-                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,data=servidor)
+                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,
+                                                               data=servidor)
                                     if requisicao.status_code != 200:
-                                        print(f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
+                                        print(
+                                            f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
                                         time.sleep(2)
                                         continue
                                     else:
@@ -471,10 +493,13 @@ class TokenFetcher:
                                         INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
                                         VALUES (%s, %s, %s, %s, %s, %s, %s)
                                         """
-                                        valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(), datetime.now())
+                                        valores = (
+                                            protocolo, matricula, solicitante, tipo, status, datetime.now(),
+                                            datetime.now())
                                         cursor.execute(sql_insert, valores)
                                         connection.commit()
-                                        print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                        print(
+                                            f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
                                         limite += 1
 
                                 sql_query = """
@@ -493,9 +518,20 @@ class TokenFetcher:
                                 print("Distribuição Finalizada")
                                 print()
                             if tipo and tipo[0] == "Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO":
+                                sql_query = """
+                                SELECT solicitante
+                                FROM solicitacoes
+                                WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO' AND (status IS NULL OR status = '')
+                                """
+                                cursor.execute(sql_query)
+                                resultado = cursor.fetchone()
+
+                                # CASO POSSUA TAREFAS de Solicitar BI execute
+                                if resultado:
+                                    siape_procurado = resultado[0]
 
                                 # Supondo que `siape_procurado` seja a variável contendo o SIAPE do solicitante em questão
-                                data_hoje = datetime.datetime.now().date()
+                                data_hoje = datetime.now().date()
 
                                 # Ajuste a query para verificar a condição desejada
                                 sql_query_verificacao = """
@@ -525,7 +561,7 @@ class TokenFetcher:
 
                                     if resultado_distribuicao:
                                         id_distribuir, = resultado_distribuicao
-                                        dt_conclusao = datetime.datetime.now()
+                                        dt_conclusao = datetime.now()
                                         status = "Limite de Tarefas Diário de Análise de Acordão Não Provido atingido."
                                         sql_update_distribuicao = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
                                         cursor.execute(sql_update_distribuicao, (status, dt_conclusao, id_distribuir))
@@ -542,7 +578,6 @@ class TokenFetcher:
                                     resultado = cursor.fetchone()
                                     if resultado:
                                         siape_procurado = resultado[0]
-                                        especie = resultado[1]
                                     else:
                                         print("Nenhum resultado encontrado.")
 
@@ -573,8 +608,10 @@ class TokenFetcher:
                                         id, subtarefa, situacao = registro
                                         protocolo = subtarefa
 
-                                        #identificar Unidade
-                                        requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',verify=False, headers=self.headers)
+                                        # identificar Unidade
+                                        requisicao = requests.get(
+                                            f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
+                                            verify=False, headers=self.headers)
                                         if requisicao.status_code != 200:
                                             print(requisicao.text)
                                             time.sleep(2)
@@ -594,7 +631,9 @@ class TokenFetcher:
 
                                         if codigo_unidade == '23150520' or codigo_unidade == '23150513':
                                             payload = "{'justificativa':'Transferencia para unidade responsavel.'}"
-                                            requisicao = requests.put(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',verify=False, headers=self.headers, data=payload)
+                                            requisicao = requests.put(
+                                                f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',
+                                                verify=False, headers=self.headers, data=payload)
                                             if requisicao.status_code != 200:
                                                 print(f"Erro na requisição. Código de status: {requisicao.status_code}")
                                                 time.sleep(2)
@@ -605,9 +644,11 @@ class TokenFetcher:
 
                                         servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
                                         url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
-                                        requisicao = requests.post(url_da_api, verify=False, headers=self.headers,data=servidor)
+                                        requisicao = requests.post(url_da_api, verify=False, headers=self.headers,
+                                                                   data=servidor)
                                         if requisicao.status_code != 200:
-                                            print(f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
+                                            print(
+                                                f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
                                             time.sleep(2)
                                             continue
                                         else:
@@ -622,10 +663,12 @@ class TokenFetcher:
                                             INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
                                             VALUES (%s, %s, %s, %s, %s, %s, %s)
                                             """
-                                            valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(), datetime.now())
+                                            valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(),
+                                                       datetime.now())
                                             cursor.execute(sql_insert, valores)
                                             connection.commit()
-                                            print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                            print(
+                                                f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
                                             limite += 1
 
                                     sql_query = """
@@ -684,8 +727,10 @@ class TokenFetcher:
                                     id, subtarefa = registro
                                     protocolo = subtarefa
 
-                                    #identificar Unidade
-                                    requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',verify=False, headers=self.headers)
+                                    # identificar Unidade
+                                    requisicao = requests.get(
+                                        f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
+                                        verify=False, headers=self.headers)
                                     if requisicao.status_code != 200:
                                         print(requisicao.text)
                                         time.sleep(2)
@@ -705,7 +750,9 @@ class TokenFetcher:
 
                                     if codigo_unidade == '23150520' or codigo_unidade == '23150513':
                                         payload = "{'justificativa':'Transferencia para unidade responsavel.'}"
-                                        requisicao = requests.put(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',verify=False, headers=self.headers, data=payload)
+                                        requisicao = requests.put(
+                                            f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/9958?retornarTarefa=true',
+                                            verify=False, headers=self.headers, data=payload)
                                         if requisicao.status_code != 200:
                                             print(f"Erro na requisição. Código de status: {requisicao.status_code}")
                                             time.sleep(2)
@@ -723,9 +770,11 @@ class TokenFetcher:
 
                                     servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
                                     url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
-                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,data=servidor)
+                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,
+                                                               data=servidor)
                                     if requisicao.status_code != 200:
-                                        print(f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
+                                        print(
+                                            f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
                                         time.sleep(2)
                                         continue
                                     else:
@@ -741,10 +790,13 @@ class TokenFetcher:
                                         INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
                                         VALUES (%s, %s, %s, %s, %s, %s, %s)
                                         """
-                                        valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(), datetime.now())
+                                        valores = (
+                                            protocolo, matricula, solicitante, tipo, status, datetime.now(),
+                                            datetime.now())
                                         cursor.execute(sql_insert, valores)
                                         connection.commit()
-                                        print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                        print(
+                                            f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
                                         limite += 1
 
                                 sql_query = """

@@ -6,6 +6,32 @@
 
 
 <style>
+
+.grafico1 {
+    flex: 1 1 50%; /* flex-grow: 1, flex-shrink: 1, flex-basis: 50% */
+    box-sizing: border-box; /* Inclui padding e border na largura definida */
+    margin-right: 10px; /* Adiciona margem à direita do gráfico */
+    border-radius: 8px;
+}
+
+.grafico1:last-child {
+    margin-right: 0; /* Remove a margem à direita do último gráfico */
+    margin-left: 10px; /* Adiciona margem à esquerda do último gráfico */
+}
+
+/* Ajuste para telas pequenas se necessário */
+@media (max-width: 768px) {
+    .grafico1 {
+        flex-basis: auto; /* Os gráficos ocuparão a largura total em telas menores */
+        margin-right: 0; /* Remove a margem à direita em telas menores */
+        margin-bottom: 20px; /* Adiciona espaço entre os gráficos quando estiverem um acima do outro */
+    }
+
+    .grafico1:last-child {
+        margin-left: 0; /* Remove a margem à esquerda do último gráfico em telas menores */
+    }
+}
+
     .hidden {
         display: none;
     }
@@ -126,14 +152,13 @@ body {
     </div>
 
 <div class="container mt-2 rounded mb-2">
-    <div class="row">
-        <div class="grafico col-md-6 bg-white shadow-md rounded-lg mr-1" id="grafico-estoque"></div>
-        <div class="grafico col-md-6 bg-white shadow-md rounded-lg mr-1" id="grafico-estoque-instrucao"></div>
-    </div>
-    <div>
+    <div class="graficos-container">
+        <div class="grafico1 bg-white shadow-md rounded-lg" id="grafico-estoque"></div>
+        <div class="grafico1 bg-white shadow-md rounded-lg" id="grafico-estoque-instrucao"></div>
     </div>
 </div>
-    <div class="grafico mt-2 col-md-12 bg-white shadow-md rounded-lg" id="grafico-estoque-especie"></div>
+
+<div class="grafico mt-2 col-md-12 bg-white shadow-md rounded-lg" id="grafico-estoque-especie"></div>
 
 
 <div class="graficos-container mt-5">
