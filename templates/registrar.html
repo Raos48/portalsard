@@ -209,7 +209,7 @@ body {
                     <td>{{ solicitacao.tipo or ''}}</td>
                     <td>{{ solicitacao.matricula or ''}}</td>
                     <td>{{ solicitacao.unidade or ''}}</td>
-                    <td>{{ solicitacao.dt_solicitacao.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                    <td>{{ solicitacao.dt_solicitacao}}</td>
                     <td>{{ solicitacao.status or ''}}</td>
                 </tr>
                 {% endfor %}
@@ -221,47 +221,55 @@ body {
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Adiciona a classe 'hidden' aos campos "Protocolo", "Matrícula" e "Espécie" inicialmente
-        document.getElementById('protocolo').parentNode.classList.add('hidden');
-        document.getElementById('matricula').parentNode.classList.add('hidden');
-        document.getElementById('especie').parentNode.classList.add('hidden'); // Adiciona a classe hidden ao campo "Espécie"
+document.addEventListener('DOMContentLoaded', function() {
+    var tipoSelect = document.getElementById('tipo');
+    var protocoloInput = document.getElementById('protocolo');
+    var solicitanteInput = document.getElementById('solicitante');
+    var especieInput = document.getElementById('especie');
+    var matriculaInput = document.getElementById('matricula'); // Adicione esta linha para definir a variável matriculaInput
+    var form = document.getElementById('registrarSolicitacao');
 
-        var tipoSelect = document.getElementById('tipo');
-        var protocoloInput = document.getElementById('protocolo');
-        var matriculaInput = document.getElementById('matricula');
-        var especieInput = document.getElementById('especie'); // Referência ao campo "Espécie"
-
-        // Função para mostrar ou ocultar os campos "Protocolo", "Matrícula" e "Espécie" com base na opção selecionada
-        function toggleFields(selectedOption) {
-            if (selectedOption === 'Transferir tarefa' || selectedOption === 'Excluir responsável' || selectedOption === 'Atribuir responsável') {
-                protocoloInput.parentNode.classList.remove('hidden');
-            } else {
-                protocoloInput.parentNode.classList.add('hidden');
-            }
-
-            if (selectedOption === 'Atribuir responsável') {
-                matriculaInput.parentNode.classList.remove('hidden');
-            } else {
-                matriculaInput.parentNode.classList.add('hidden');
-            }
-
-            // Mostra o campo "Espécie" apenas quando "Solicitar Tarefas de Análise de Acordão" é selecionado
-            if (selectedOption === 'Solicitar Tarefas de Análise de Acordão') {
-                especieInput.parentNode.classList.remove('hidden');
-            } else {
-                especieInput.parentNode.classList.add('hidden');
-            }
+    function toggleFields(selectedOption) {
+        if (selectedOption === 'Transferir tarefa' || selectedOption === 'Excluir responsável' || selectedOption === 'Atribuir responsável') {
+            protocoloInput.parentNode.classList.remove('hidden');
+        } else {
+            protocoloInput.parentNode.classList.add('hidden');
         }
 
-        // Adiciona um evento de mudança ao campo "Tipo"
-        tipoSelect.addEventListener('change', function() {
-            toggleFields(this.value);
-        });
+        if (selectedOption === 'Atribuir responsável') {
+            matriculaInput.parentNode.classList.remove('hidden');
+        } else {
+            matriculaInput.parentNode.classList.add('hidden');
+        }
 
-        // Chama a função para garantir que os campos "Protocolo", "Matrícula" e "Espécie" sejam exibidos ou ocultos corretamente ao carregar a página
-        toggleFields(tipoSelect.value);
+        // Mostra o campo "Espécie" apenas quando "Solicitar Tarefas de Análise de Acordão" é selecionado
+        if (selectedOption === 'Solicitar Tarefas de Análise de Acordão') {
+            especieInput.parentNode.classList.remove('hidden');
+        } else {
+            especieInput.parentNode.classList.add('hidden');
+        }
+    }
+
+    // Adiciona validação adicional antes do envio do formulário
+    form.addEventListener('submit', function(event) {
+        var tipo = tipoSelect.value;
+        var protocolo = protocoloInput.value.trim();
+        var solicitante = solicitanteInput.value.trim();
+        var especie = especieInput.value.trim();
+
+        // Verifica as opções 'Transferir tarefa', 'Excluir responsável', 'Atribuir responsável'
+        if ((tipo === 'Transferir tarefa' || tipo === 'Excluir responsável' || tipo === 'Atribuir responsável') && !protocolo) {
+            alert('Por favor, preencha o campo Protocolo.');
+            event.preventDefault(); // Impede o envio do formulário
+        }
     });
+
+    tipoSelect.addEventListener('change', function() {
+        toggleFields(this.value);
+    });
+
+    toggleFields(tipoSelect.value);
+});
 </script>
 
 

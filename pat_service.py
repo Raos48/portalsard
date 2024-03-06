@@ -439,8 +439,7 @@ class TokenFetcher:
                                     protocolo = subtarefa
 
                                     # identificar Unidade
-                                    requisicao = requests.get(
-                                        f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
+                                    requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
                                         verify=False, headers=self.headers)
                                     if requisicao.status_code != 200:
                                         print(requisicao.text)
@@ -608,10 +607,25 @@ class TokenFetcher:
                                         id, subtarefa, situacao = registro
                                         protocolo = subtarefa
 
+                                        #verificar responsáveis
+                                        requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers)
+                                        if requisicao.status_code != 200:
+                                            print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                            continue
+                                        tarefa = requisicao.json()
+                                        responsaveis = tarefa['responsaveis']['responsaveis']
+                                        if len(responsaveis) != 0:
+                                            status = "Tarefa já possui responsável"
+                                            sql_update_estoque = "UPDATE estoque SET status = %s WHERE subtarefa = %s"
+                                            cursor.execute(sql_update_estoque, (status, protocolo))
+                                            connection.commit()
+                                            print(f"tarefa já possui responsável atribuído.")
+                                            print(protocolo,status)
+                                            continue
+
+
                                         # identificar Unidade
-                                        requisicao = requests.get(
-                                            f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
-                                            verify=False, headers=self.headers)
+                                        requisicao = requests.get( f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',verify=False, headers=self.headers)
                                         if requisicao.status_code != 200:
                                             print(requisicao.text)
                                             time.sleep(2)
