@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Remoção da biblioteca urllib3==1.25.11 do requeriments.txt">
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Alteração do selenium 4.0 para Selenium 3.141.0">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709740861694</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Alteração do selenium 4.0 para Selenium 3.141.0">
+      <option name="closed" value="true" />
+      <created>1709741481436</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1709741481436</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -172,7 +181,8 @@
     <MESSAGE value="Instalação Gunicor e atualização requeriments.txt" />
     <MESSAGE value="Exclusão biblioteca idna" />
     <MESSAGE value="Remoção da biblioteca urllib3==1.25.11 do requeriments.txt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remoção da biblioteca urllib3==1.25.11 do requeriments.txt" />
+    <MESSAGE value="Alteração do selenium 4.0 para Selenium 3.141.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="Alteração do selenium 4.0 para Selenium 3.141.0" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

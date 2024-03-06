@@ -11,20 +11,32 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, render_template, redirect, url_for
 import plotly.graph_objs as go
 
+#conexão local
+# DEBUG = True
+# USERNAME = 'root'
+# PASSWORD = 'root'
+# SERVER = 'localhost'
+# DB = 'db_sard'
+# SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
 
-DEBUG = True
-USERNAME = 'root'
-PASSWORD = 'root'
-SERVER = 'localhost'
-DB = 'db_sard'
-
-SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
-
+#conexão RDS
 # USERNAME = 'admin'
 # PASSWORD = 'raos481050'
 # SERVER = 'rds-sard.czgatsoo6uc5.sa-east-1.rds.amazonaws.com:3306'
 # DB = 'rds_sard'
 # SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
+
+#CONEXÃO NGROK
+DEBUG = True
+USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
+PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
+SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
+PORT = '13088'  # A porta fornecida pelo ngrok
+DB = 'db_sard'
+# Atualize a URI de conexão com o endereço do ngrok e a porta correta
+SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DB}'
+
+
 
 
 
