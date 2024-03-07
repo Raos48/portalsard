@@ -87,6 +87,11 @@ def index():
     return redirect(url_for('registrar'))
 
 
+
+
+
+
+
 # @app.route('/solicitacoes')
 # def solicitacoes():
 #     page = request.args.get('page', 1, type=int)
@@ -112,14 +117,19 @@ def registrar():
         db.session.add(nova_solicitacao)
         try:
             db.session.commit()
+            flash(f"Registro Realizado com sucesso!", category="success")
+            nova_solicitacao_id = nova_solicitacao.id  # Obtém o ID da nova solicitação
+            return jsonify({'success': True, 'id': nova_solicitacao_id})  # Retorna o ID ao frontend
         except Exception as e:
+            flash("Erro ao realizar o registro.", category="danger")
+            return jsonify({'success': False, 'message': str(e)})
             db.session.rollback()
             # Trate o erro conforme necessário
             print(e)
         return redirect(url_for('registrar'))
 
     # todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).all()
-    todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).limit(100).all()
+    todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).limit(50).all()
     status_mais_recente = StatusAPI.query.order_by(StatusAPI.id.desc()).first()
     return render_template('registrar.html', solicitacoes=todas_solicitacoes,status_api=status_mais_recente)
 
@@ -187,6 +197,13 @@ def dados_grafico():
     return jsonify(grafico_data)
 
 
+@app.route('/verificar-status/<int:id>', methods=['GET'])
+def verificar_status(id):
+    solicitacao = Solicitacoes.query.filter_by(id=id).first()
+    if solicitacao and solicitacao.status:  # Assume que `status` não é nulo ou vazio quando concluído
+        return jsonify({'status': 'concluido', 'mensagem': solicitacao.status})
+    else:
+        return jsonify({'status': 'pendente'})
 
 
 

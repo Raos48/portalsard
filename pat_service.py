@@ -270,28 +270,28 @@ class TokenFetcher:
                                         "order_by": "ASCENDING"
                                     }
 
-                                    data = {
-                                        "status": "PENDENTE_E_CUMPRIMENTO_DE_EXIGENCIA",
-                                        "grupoServicos": [
-                                            {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
-                                        "servicos": [
-                                            {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR",
-                                             "value": "5473",
-                                             "id": 5473}
-                                        ]
-                                    }
-
                                     # data = {
                                     #     "status": "PENDENTE_E_CUMPRIMENTO_DE_EXIGENCIA",
                                     #     "grupoServicos": [
                                     #         {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
                                     #     "servicos": [
-                                    #         {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
-                                    #          "id": 5473},
-                                    #         {"label": "Auxílio-Doença - Urbano (Acerto Pós-perícia) - TADU",
-                                    #          "value": "5474", "id": 5474}
+                                    #         {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR",
+                                    #          "value": "5473",
+                                    #          "id": 5473}
                                     #     ]
                                     # }
+
+                                    data = {
+                                        "status": "PENDENTE_E_CUMPRIMENTO_DE_EXIGENCIA",
+                                        "grupoServicos": [
+                                            {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
+                                        "servicos": [
+                                            {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
+                                             "id": 5473},
+                                            {"label": "Auxílio-Doença - Urbano (Acerto Pós-perícia) - TADU",
+                                             "value": "5474", "id": 5474}
+                                        ]
+                                    }
 
                                     response = requests.post(url, json=data, headers=self.headers, params=params)
 
@@ -437,6 +437,24 @@ class TokenFetcher:
 
                                     id, subtarefa, especie = registro
                                     protocolo = subtarefa
+
+                                    # verificar responsáveis
+                                    requisicao = requests.get(
+                                        f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
+                                        verify=False, headers=self.headers)
+                                    if requisicao.status_code != 200:
+                                        print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                        continue
+                                    tarefa = requisicao.json()
+                                    responsaveis = tarefa['responsaveis']['responsaveis']
+                                    if len(responsaveis) != 0:
+                                        status = "Tarefa já possui responsável"
+                                        sql_update_estoque = "UPDATE estoque SET status = %s WHERE subtarefa = %s"
+                                        cursor.execute(sql_update_estoque, (status, protocolo))
+                                        connection.commit()
+                                        print(f"tarefa já possui responsável atribuído.")
+                                        print(protocolo, status)
+                                        continue
 
                                     # identificar Unidade
                                     requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
@@ -849,117 +867,6 @@ class TokenFetcher:
         except mysql.connector.Error as e:
             print(f"Erro ao conectar ao banco de dados: {e}")
             exit()
-
-    # def __init__(self):
-    #     self.limpar_terminal()
-    #     urllib3.disable_warnings()
-    #     options = webdriver.ChromeOptions()
-    #     self.limpar_terminal()
-    #     options.add_argument('--ignore-certificate-errors-spki-list')
-    #     options.add_argument('--ignore-ssl-errors')
-    #     options.add_argument("--log-level=3")
-    #     options.add_argument("--disable-logging")
-    #     options.page_load_strategy = 'normal'
-    #     self.limpar_terminal()
-    #     programa_pasta_raiz = os.path.dirname(os.path.abspath(__file__))
-    #     os.environ["PATH"] += os.pathsep + programa_pasta_raiz
-    #     driver = webdriver.Chrome(options=options)
-    #     driver.maximize_window()
-    #     driver.get("https://www-atendimento/")
-    #     self.limpar_terminal()
-    #     driver.implicitly_wait(10)
-    #     driver.find_element(By.ID, "details-button").click()
-    #     self.limpar_terminal()
-    #     driver.find_element(By.ID, "proceed-link").click()
-    #     self.limpar_terminal()
-    #     time.sleep(3)
-    #     print()
-    #     print("Robô para Distribuição de Tarefas.")
-    #     print()
-    #     print("Aguardando Login no sistema PAT...")
-    #     print()
-    #     time.sleep(3)
-    #     wait = WebDriverWait(driver, 120)  # Aguarda até 10 segundos
-    #     element = wait.until(
-    #         EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[2]/div/header/div[1]/span")))
-    #     self.limpar_terminal()
-    #     for i in range(30, 0, -1):
-    #         print(f"Aguardando: {i} segundos")
-    #         time.sleep(1)
-    #     print("Tempo encerrado!")
-    #     self.limpar_terminal()
-    #     js_script = "return localStorage.getItem('ifs_auth');"
-    #     js_script2 = "return localStorage.getItem('srv_auth');"
-    #     resultado = driver.execute_script(js_script)
-    #     token = driver.execute_script(js_script2)
-    #     urllib3.disable_warnings()
-    #     self.headers = {'Authorization': 'Bearer ' + resultado, 'Content-type': 'application/json',
-    #                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
-    #                     'tokenservidor': token, 'Accept': 'application/json'}
-    #     driver.quit()
-    #     with open('headers.txt', 'w') as file:
-    #         file.write(json.dumps(self.headers))
-    #
-    #     while True:
-    #         time.sleep(30)
-    #         requisicao = requests.get("https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/888296716",verify=False, headers=self.headers)
-    #         if requisicao.status_code != 200:
-    #             print(f"Erro na requisição. Código de status: {requisicao.status_code}")
-    #             print(f"API Offline - Data e hora: {current_time}")
-    #             continue
-    #         else:
-    #             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Obter data e hora atuais
-    #             print(f"API Online - Data e hora: {current_time}")
-    #
-    #             try:
-    #                 connection = mysql.connector.connect(
-    #                     host='localhost',
-    #                     user='root',
-    #                     password='root',
-    #                     database='db_sard'
-    #                 )
-    #                 cursor = connection.cursor()
-    #             except Exception as e:
-    #                 print(f"Erro ao conectar ao banco de dados: {e}")
-    #                 exit()
-    #
-    #             cursor = connection.cursor()
-    #
-    #             cursor.execute("SELECT id, protocolo FROM solicitacoes WHERE status IS NULL OR status = ''")
-    #             registros = cursor.fetchall()
-    #
-    #             if not registros:
-    #                 print("Nenhum registro para processar.")
-    #             else:
-    #                 print(f"Processando {len(registros)} registros...")
-    #
-    #             for id, protocolo in registros:
-    #                 try:
-    #                     url = f"https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}?servidor=true"
-    #                     requisicao = requests.get(url, verify=False, headers=self.headers)
-    #                     print(f"Requisição para {url} retornou status {requisicao.status_code}")
-    #                     resposta = requisicao.status_code
-    #                     if requisicao.status_code == 200:
-    #                         status = "sucesso"
-    #                         sql = """
-    #                             UPDATE solicitacoes
-    #                             SET status = %s
-    #                             WHERE id = %s
-    #                         """
-    #                         values = (status, id)
-    #
-    #                         cursor.execute(sql, values)
-    #                         connection.commit()
-    #                         print("Registro processado com sucesso.")
-    #
-    #                 except Exception as e:
-    #                     print(f"Erro ao buscar registros: {e}")
-    # def limpar_terminal(self):
-    #     if os.name == 'nt':
-    #         os.system('cls')
-    #     else:
-    #         os.system('clear')
-
 
 if __name__ == "__main__":
     PATDistributor = TokenFetcher()

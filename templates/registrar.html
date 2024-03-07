@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 
 <style>
@@ -114,6 +114,14 @@ body {
                     {% endif %}
                 </div>
                 <div class="p-4">
+
+                    <div id="alertContainer" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+                        <span id="alertMessage">Solicitação atendida com sucesso.</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
                     <form id="registrarSolicitacao" method="POST" class="space-y-4">
                         <div>
                             <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
@@ -149,7 +157,10 @@ body {
                             <input type="text" id="unidade" name="unidade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div class="flex justify-center">
-                            <button type="submit" class="px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-700">Registrar</button>
+                            <button type="submit" class="px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-700 relative">
+                                Registrar
+                                <i id="spinner" class="fas fa-spinner fa-spin" style="display: none; margin-left: 5px;"></i>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -275,6 +286,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -355,6 +368,78 @@ $(document).ready(function() {
         order: [[0, 'desc']] // Ordena pela primeira coluna em ordem ascendente
     });
 });
+</script>
+
+<script>
+document.getElementById('registrarSolicitacao').addEventListener('submit', function(e) {
+    e.preventDefault();  // Previne o envio tradicional do formulário
+
+    // Exibe o spinner dentro do botão e desabilita o botão
+    var spinner = document.getElementById('spinner');
+    var button = this.querySelector('button');
+    console.log('Exibindo spinner');
+    spinner.style.display = 'inline-block';  // Ou 'block', dependendo da sua preferência
+    button.disabled = true;  // Opcional: desabilita o botão durante o carregamento
+
+    var formData = new FormData(this);
+    fetch('/registrar', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())  // Converte a resposta para JSON
+    .then(data => {
+        if (data.success) {
+            checkStatus(data.id);  // Inicia a verificação do status
+        } else {
+            // Em caso de falha no envio, esconde o spinner e reabilita o botão
+            spinner.style.display = 'none';
+            button.disabled = false;
+            // Handle error
+            displayAlert(data.message, 'alert-danger'); // Mostra a mensagem de erro com alerta personalizado
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        spinner.style.display = 'none';
+        button.disabled = false;
+        displayAlert('Ocorreu um erro ao enviar a solicitação.', 'alert-danger');
+    });
+});
+
+
+function checkStatus(id) {
+    setTimeout(function() {
+        fetch('/verificar-status/' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'concluido') {
+                spinner.style.display = 'none';
+                button.disabled = false; // Reabilita o botão
+                // Substitui o alerta tradicional pela função de exibição do alerta personalizado
+                displayAlert('Solicitação Concluída: ' + data.mensagem, 'alert-success');
+                // Define um atraso antes de recarregar a página para permitir que o usuário veja a mensagem
+                setTimeout(function() {
+                    window.location.reload(); // Recarrega a página
+                }, 3000); // Ajuste o atraso conforme necessário
+            } else {
+                // Se ainda pendente, verifica novamente
+                checkStatus(id);
+            }
+        });
+    }, 3000);  // Intervalo de verificação, ajuste conforme necessário
+}
+
+
+function displayAlert(message, alertType) {
+    const alertContainer = document.getElementById('alertContainer');
+    const alertMessage = document.getElementById('alertMessage');
+
+    // Define a classe de alerta baseada no tipo de alerta
+    alertContainer.className = `alert ${alertType} alert-dismissible fade show`;
+    alertMessage.textContent = message; // Define a mensagem do alerta
+
+    // Exibe o alerta
+    alertContainer.style.display = 'block';
+}
 </script>
 
 
