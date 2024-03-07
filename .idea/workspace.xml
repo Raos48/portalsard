@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Ajuste Script com regras de validação">
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Inclusão ícone de animação no botão de solicitação">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/headers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/headers.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pat_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/pat_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/registrar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registrar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -195,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709758127510</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Inclusão ícone de animação no botão de solicitação">
+      <option name="closed" value="true" />
+      <created>1709821292809</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1709821292809</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -221,7 +226,8 @@
     <MESSAGE value="Trata-se de atualização LAYOUT - registrar.html graficos lado a lado fixos" />
     <MESSAGE value="Atualização de Layout e Script do Grafico" />
     <MESSAGE value="Ajuste Script com regras de validação" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajuste Script com regras de validação" />
+    <MESSAGE value="Inclusão ícone de animação no botão de solicitação" />
+    <option name="LAST_COMMIT_MESSAGE" value="Inclusão ícone de animação no botão de solicitação" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
