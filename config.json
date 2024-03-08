@@ -1,0 +1,13 @@
+{
+  "db_host": "localhost",
+  "db_user": "root",
+  "db_password": "root",
+  "db_name": "db_sard",
+  "headers_path": "headers.txt",
+  "api_base_url": "https://vip-pportalspaapr01.inss.prevnet/apis",
+  "webdriver_options": {
+    "ignore_certificate_errors": true,
+    "disable_logging": true,
+    "page_load_strategy": "normal"
+  }
+}

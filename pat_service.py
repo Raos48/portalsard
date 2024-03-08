@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from urllib3.exceptions import InsecureRequestWarning
 import time
 import json
 import requests
@@ -11,9 +12,12 @@ from datetime import datetime
 import mysql.connector
 from datetime import datetime, timedelta
 
-requests.packages.urllib3.disable_warnings()
+# Desabilitando avisos de segurança para demonstração, mas não recomendado para produção
+requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+
 pasta_raiz = os.getcwd()
 headers_file_path = os.path.join(pasta_raiz, 'headers.txt')
+
 
 
 class TokenFetcher:
@@ -130,16 +134,25 @@ class TokenFetcher:
         try:
             with self.connect_to_database() as connection:
                 with connection.cursor(buffered=True) as cursor:
-                    cursor.execute("SELECT id, protocolo FROM solicitacoes WHERE status IS NULL OR status = ''")
+                    cursor.execute("SELECT id, tipo, protocolo FROM solicitacoes WHERE status IS NULL OR status = ''")
                     registros = cursor.fetchall()
                     if not registros:
                         print("Nenhum registro para processar.")
                         return
                     print(f"Processando {len(registros)} registros...")
-                    for id_linha, protocolo in registros:
+                    for id_linha, tipo, protocolo in registros:
                         print()
                         with open('servidores.json', 'r') as file:
                             servidores = json.load(file)
+
+                        if (tipo == "Atribuir responsável" or tipo == "Excluir responsável") and protocolo is None:
+                            status = "Favor informar o Numero do Protocolo"
+                            dt_conclusao = datetime.now()
+                            sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                            cursor.execute(sql_update, (status, dt_conclusao, id_linha))
+                            connection.commit()
+                            print(f"Registro {id_linha} processado com sucesso.")
+                            break
 
                         if protocolo is not None:
                             url = f"https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}?servidor=true"
@@ -185,9 +198,7 @@ class TokenFetcher:
                                         id_responsavel = str(id_)
                                         break
                                 servidor = '{"responsaveis":[{"id":' + id_responsavel + '}]}'
-                                requisicao = requests.post(
-                                    f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
-                                    verify=False, headers=self.headers, data=servidor)
+                                requisicao = requests.post(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers, data=servidor)
                                 if requisicao.status_code != 200:
                                     print(f"Erro na requisição. Código de status: {requisicao.status_code}")
                                     continue
@@ -199,31 +210,15 @@ class TokenFetcher:
                                 print(f"Registro {id_solicitacao} processado com sucesso.")
 
                             elif tipo == 'Excluir responsável':
-                                requisicao_get = requests.get(
-                                    f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
-                                    verify=False, headers=self.headers)
+                                requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}', verify=False, headers=self.headers)
                                 if requisicao_get.status_code == 200:
                                     tarefa = requisicao_get.json()
                                     responsaveis = tarefa['responsaveis']['responsaveis']
-                                    print(responsaveis)
-                                    if len(responsaveis) != 0:
-                                        for responsavel in responsaveis:
-                                            id_responsavel = responsavel['id']
-                                            requisicao_delete = requests.delete(
-                                                f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',
-                                                verify=False, headers=self.headers)
-                                            if requisicao_delete.status_code == 200:
-                                                print(f"Exclusão do responsável efetuada com sucesso")
-                                                status = "Exclusão do responsável efetuada com sucesso"
-                                                dt_conclusao = datetime.now()
-                                                sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                                cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
-                                                connection.commit()
-                                                print(f"Registro {id_solicitacao} processado com sucesso.")
-                                            else:
-                                                print(
-                                                    f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
-                                    else:
+                                    print("=============================================")
+                                    print(f"Responsáveis:",responsaveis)
+                                    print("=============================================")
+
+                                    if len(responsaveis) == 0:
                                         print("Não há responsáveis na tarefa.")
                                         status = "Não há responsáveis na tarefa."
                                         dt_conclusao = datetime.now()
@@ -231,6 +226,49 @@ class TokenFetcher:
                                         cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
                                         connection.commit()
                                         print(f"Registro {id_solicitacao} processado com sucesso.")
+                                        break
+
+                                    for responsavel in responsaveis:
+                                        if responsavel['siape'] == int(solicitante):
+                                            id_responsavel = responsavel['id']
+                                            break
+
+
+                                    requisicao_delete = requests.delete( f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',verify=False, headers=self.headers)
+                                    if requisicao_delete.status_code == 200:
+                                        print(f"Exclusão do responsável efetuada com sucesso")
+                                        status = "Exclusão do responsável efetuada com sucesso"
+                                        dt_conclusao = datetime.now()
+                                        sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                        cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
+                                        connection.commit()
+                                        print(f"Registro {id_solicitacao} processado com sucesso.")
+                                    else:
+                                        print( f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
+
+                                    # if len(responsaveis) != 0:
+                                    #     for responsavel in responsaveis:
+                                    #         id_responsavel = responsavel['id']
+                                    #         requisicao_delete = requests.delete( f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',verify=False, headers=self.headers)
+                                    #         if requisicao_delete.status_code == 200:
+                                    #             print(f"Exclusão do responsável efetuada com sucesso")
+                                    #             status = "Exclusão do responsável efetuada com sucesso"
+                                    #             dt_conclusao = datetime.now()
+                                    #             sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                    #             cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
+                                    #             connection.commit()
+                                    #             print(f"Registro {id_solicitacao} processado com sucesso.")
+                                    #         else:
+                                    #             print( f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
+                                    # else:
+                                    #     print("Não há responsáveis na tarefa.")
+                                    #     status = "Não há responsáveis na tarefa."
+                                    #     dt_conclusao = datetime.now()
+                                    #     sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                    #     cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
+                                    #     connection.commit()
+                                    #     print(f"Registro {id_solicitacao} processado com sucesso.")
+
                                 else:
                                     print(f"Erro na requisição GET. Código de status: {requisicao_get.status_code}")
                                     status = "Erro na requisição GET. Código de status: {requisicao_get.status_code}"
@@ -543,14 +581,14 @@ class TokenFetcher:
                                 cursor.execute(sql_query)
                                 resultado = cursor.fetchone()
 
-                                # CASO POSSUA TAREFAS de Solicitar BI execute
+
                                 if resultado:
                                     siape_procurado = resultado[0]
 
-                                # Supondo que `siape_procurado` seja a variável contendo o SIAPE do solicitante em questão
+
                                 data_hoje = datetime.now().date()
 
-                                # Ajuste a query para verificar a condição desejada
+                                # Verificar se já tem solicitação na data de hoje
                                 sql_query_verificacao = """
                                 SELECT COUNT(*)
                                 FROM solicitacoes
@@ -579,7 +617,7 @@ class TokenFetcher:
                                     if resultado_distribuicao:
                                         id_distribuir, = resultado_distribuicao
                                         dt_conclusao = datetime.now()
-                                        status = "Limite de Tarefas Diário de Análise de Acordão Não Provido atingido."
+                                        status = "Limite de Solicitações diárias de Análise de Acordão Não Provido atingido."
                                         sql_update_distribuicao = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
                                         cursor.execute(sql_update_distribuicao, (status, dt_conclusao, id_distribuir))
                                         connection.commit()
@@ -617,9 +655,10 @@ class TokenFetcher:
 
                                         cursor.execute(sql_query_estoque)
                                         registro = cursor.fetchone()
-
+                                        sit_estoque = False
                                         if not registro:
                                             print("Não há tarefas para processar.")
+                                            sit_estoque = True
                                             break
 
                                         id, subtarefa, situacao = registro
@@ -703,21 +742,38 @@ class TokenFetcher:
                                                 f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
                                             limite += 1
 
-                                    sql_query = """
-                                    SELECT id
-                                    FROM solicitacoes
-                                    WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO' AND (status IS NULL OR status = '')
-                                    """
-                                    cursor.execute(sql_query)
-                                    resultado = cursor.fetchone()
-                                    id_distribuir = resultado[0]
-                                    dt_conclusao = datetime.now()
-                                    status = "Tarefas Distribuídas com sucesso."
-                                    sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                    cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
-                                    connection.commit()
-                                    print("Distribuição Finalizada")
-                                    print()
+                                    if sit_estoque:
+                                        sql_query = """
+                                        SELECT id
+                                        FROM solicitacoes
+                                        WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO' AND (status IS NULL OR status = '')
+                                        """
+                                        cursor.execute(sql_query)
+                                        resultado = cursor.fetchone()
+                                        id_distribuir = resultado[0]
+                                        dt_conclusao = datetime.now()
+                                        status = "Não há mais tarefas Análise de Acordão - NÃO PROVIDO para distribuição"
+                                        sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                        cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
+                                        connection.commit()
+                                        print("Distribuição Finalizada")
+                                        print()
+                                    else:
+                                        sql_query = """
+                                        SELECT id
+                                        FROM solicitacoes
+                                        WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO' AND (status IS NULL OR status = '')
+                                        """
+                                        cursor.execute(sql_query)
+                                        resultado = cursor.fetchone()
+                                        id_distribuir = resultado[0]
+                                        dt_conclusao = datetime.now()
+                                        status = "Tarefas Distribuídas com sucesso."
+                                        sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                        cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
+                                        connection.commit()
+                                        print("Distribuição Finalizada")
+                                        print()
 
                             if tipo and tipo[0] == "Solicitar Tarefas de Instrução de Recurso":
                                 sql_query = """

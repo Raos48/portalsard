@@ -10,6 +10,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, render_template, redirect, url_for
 import plotly.graph_objs as go
+from sqlalchemy.exc import OperationalError
 
 #conexão local
 # DEBUG = True
@@ -87,7 +88,11 @@ def index():
     return redirect(url_for('registrar'))
 
 
-
+@app.errorhandler(OperationalError)
+def handle_operational_error(error):
+    # Você pode logar o erro aqui se necessário
+    print(error)
+    return render_template('error.html'), 500
 
 
 

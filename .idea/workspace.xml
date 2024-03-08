@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Inclusão ícone de animação no botão de solicitação">
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Correção BUG Mensagem de Sucesso Após processamento e confirmação.">
+      <change afterPath="$PROJECT_DIR$/Pasta1.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/error.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/headers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/headers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pat_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/pat_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/registrar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registrar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,8 +22,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -200,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709821292809</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Correção BUG Mensagem de Sucesso Após processamento e confirmação.">
+      <option name="closed" value="true" />
+      <created>1709823946170</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1709823946170</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -227,19 +241,20 @@
     <MESSAGE value="Atualização de Layout e Script do Grafico" />
     <MESSAGE value="Ajuste Script com regras de validação" />
     <MESSAGE value="Inclusão ícone de animação no botão de solicitação" />
-    <option name="LAST_COMMIT_MESSAGE" value="Inclusão ícone de animação no botão de solicitação" />
+    <MESSAGE value="Correção BUG Mensagem de Sucesso Após processamento e confirmação." />
+    <option name="LAST_COMMIT_MESSAGE" value="Correção BUG Mensagem de Sucesso Após processamento e confirmação." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pat_service.py</url>
-          <line>319</line>
+          <line>357</line>
           <option name="timeStamp" value="37" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pat_service.py</url>
-          <line>755</line>
+          <line>811</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
