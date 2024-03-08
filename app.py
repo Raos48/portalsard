@@ -94,7 +94,11 @@ def handle_operational_error(error):
     print(error)
     return render_template('error.html'), 500
 
-
+@app.route('/error')
+def show_error_page():
+    # Aqui você deve renderizar o template da página de erro diretamente,
+    # em vez de tentar redirecionar para um template
+    return render_template('error.html')
 
 
 # @app.route('/solicitacoes')
