@@ -7,198 +7,255 @@
 
 <style>
 
-.separator {
-    width: 10px; /* Largura da linha vertical */
-    background-color: #555; /* Cor da linha vertical */
-    margin: 0 2px; /* Margem para espaçamento entre os gráficos */
-}
-
-/* Adicione uma classe para o contêiner do formulário */
-.form-container {
-    flex-basis: 100%;
-    box-sizing: border-box;
-    margin-right: 10px;
-}
-
-/* Ajuste para telas menores */
-@media (max-width: 768px) {
-    .form-container {
-        flex-basis: 100%; /* O formulário ocupará a largura total em telas menores */
-        margin-right: 0;
-        margin-bottom: 20px;
+    .separator {
+        width: 10px; /* Largura da linha vertical */
+        background-color: #555; /* Cor da linha vertical */
+        margin: 0 2px; /* Margem para espaçamento entre os gráficos */
     }
-}
 
-.grafico1 {
-    flex: 1 1 50%; /* flex-grow: 1, flex-shrink: 1, flex-basis: 50% */
-    box-sizing: border-box; /* Inclui padding e border na largura definida */
-    margin-right: 10px; /* Adiciona margem à direita do gráfico */
-    border-radius: 8px;
-}
+    /* Adicione uma classe para o contêiner do formulário */
+    .form-container {
+        flex-basis: 100%;
+        box-sizing: border-box;
+        margin-right: 10px;
+    }
 
-.grafico1:last-child {
-    margin-right: 0; /* Remove a margem à direita do último gráfico */
-    margin-left: 10px; /* Adiciona margem à esquerda do último gráfico */
-}
+    /* Ajuste para telas menores */
+    @media (max-width: 768px) {
+        .form-container {
+            flex-basis: 100%; /* O formulário ocupará a largura total em telas menores */
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+    }
 
-/* Ajuste para telas pequenas se necessário */
-@media (max-width: 768px) {
     .grafico1 {
-        flex-basis: auto; /* Os gráficos ocuparão a largura total em telas menores */
-        margin-right: 0; /* Remove a margem à direita em telas menores */
-        margin-bottom: 20px; /* Adiciona espaço entre os gráficos quando estiverem um acima do outro */
+        flex: 1 1 50%; /* flex-grow: 1, flex-shrink: 1, flex-basis: 50% */
+        box-sizing: border-box; /* Inclui padding e border na largura definida */
+        margin-right: 10px; /* Adiciona margem à direita do gráfico */
+        border-radius: 8px;
     }
 
     .grafico1:last-child {
-        margin-left: 0; /* Remove a margem à esquerda do último gráfico em telas menores */
-    }
-}
-
-    .hidden {
-        display: none;
+        margin-right: 0; /* Remove a margem à direita do último gráfico */
+        margin-left: 10px; /* Adiciona margem à esquerda do último gráfico */
     }
 
-body {
-    background-color: #edf3fa; /* Cor cinza azulado claro */
-    font-size: 14px; /* Tamanho da fonte reduzido */
-}
+    /* Ajuste para telas pequenas se necessário */
+    @media (max-width: 768px) {
+        .grafico1 {
+            flex-basis: auto; /* Os gráficos ocuparão a largura total em telas menores */
+            margin-right: 0; /* Remove a margem à direita em telas menores */
+            margin-bottom: 20px; /* Adiciona espaço entre os gráficos quando estiverem um acima do outro */
+        }
 
-.custom-title {
-    font-size: 24px; /* Aumenta o tamanho da fonte */
-    color: #34568B; /* Cor azul escura para o texto */
-    font-weight: bold; /* Torna o texto em negrito */
-    text-shadow: 1px 1px 2px #8a8a8a; /* Sombra leve para dar profundidade */
-    letter-spacing: 1.5px; /* Espaçamento entre as letras */
-    padding: 10px 0; /* Padding superior e inferior para dar mais espaço */
-    margin-bottom: 20px; /* Espaço extra abaixo do título */
-}
+        .grafico1:last-child {
+            margin-left: 0; /* Remove a margem à esquerda do último gráfico em telas menores */
+        }
+    }
 
-.graficos-container {
-    display: flex;
-    justify-content: space-around; /* Isso distribui espaço igualmente entre os elementos, você pode ajustar conforme necessário */
-    align-items: flex-start; /* Isso alinha os itens ao topo, você pode ajustar conforme necessário */
-}
+        .hidden {
+            display: none;
+        }
 
-.grafico {
-    flex-basis: 48%; /* Isso define uma base para cada gráfico ocupar quase metade do espaço disponível, ajuste conforme necessário */
-    /* Adicione margem ou padding conforme necessário */
-}
+    body {
+        background-color: #edf3fa; /* Cor cinza azulado claro */
+        font-size: 14px; /* Tamanho da fonte reduzido */
+    }
 
-/* Se necessário, ajuste para telas menores */
-@media (max-width: 768px) {
+    .custom-title {
+        font-size: 24px; /* Aumenta o tamanho da fonte */
+        color: #34568B; /* Cor azul escura para o texto */
+        font-weight: bold; /* Torna o texto em negrito */
+        text-shadow: 1px 1px 2px #8a8a8a; /* Sombra leve para dar profundidade */
+        letter-spacing: 1.5px; /* Espaçamento entre as letras */
+        padding: 10px 0; /* Padding superior e inferior para dar mais espaço */
+        margin-bottom: 20px; /* Espaço extra abaixo do título */
+    }
+
     .graficos-container {
-        flex-direction: column;
+        display: flex;
+        justify-content: space-around; /* Isso distribui espaço igualmente entre os elementos, você pode ajustar conforme necessário */
+        align-items: flex-start; /* Isso alinha os itens ao topo, você pode ajustar conforme necessário */
     }
+
     .grafico {
-        flex-basis: auto; /* Os gráficos ocuparão a largura total em telas menores */
-        margin-bottom: 20px; /* Adiciona espaço entre os gráficos quando estiverem um acima do outro */
+        flex-basis: 48%; /* Isso define uma base para cada gráfico ocupar quase metade do espaço disponível, ajuste conforme necessário */
+        /* Adicione margem ou padding conforme necessário */
     }
-}
+
+    /* Se necessário, ajuste para telas menores */
+    @media (max-width: 768px) {
+        .graficos-container {
+            flex-direction: column;
+        }
+        .grafico {
+                flex-basis: auto; /* Os gráficos ocuparão a largura total em telas menores */
+            margin-bottom: 20px; /* Adiciona espaço entre os gráficos quando estiverem um acima do outro */
+            }
+    }
 
 </style>
 
 <h3 class="mt-3 text-center custom-title bg-white shadow-md rounded-lg w-full">Solicitações SARD GEX ANAPOLIS</h3>
 
-<div class="container mx-auto mt-3">
-    <div class="flex justify-center">
-        <div class="form-container">
-            <div class="bg-white shadow-md rounded-lg">
-                <div class="p-4 border-b">
-                    <h2 class="text-2xl font-bold">Status da Aplicação</h2>
-                    <br>
-                    {% if status_api.status == "Online" %}
-                        <p class="text-sm text-green-600">
-                            <i class="fa-solid fa-circle-check mr-2"></i>
-                            A API está <span class="font-semibold" id="apiStatus1">Online</span>
-                        </p>
-                    {% else %}
-                        <p class="text-sm text-red-600">
-                            <i class="fa-solid fa-circle-exclamation mr-2"></i>
-                            A API está <span class="font-semibold" id="apiStatus2">Offline</span>
-                        </p>
-                    {% endif %}
-                </div>
-                <div class="p-4">
 
-                    <div id="alertContainer" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
-                        <span id="alertMessage">Solicitação atendida com sucesso.</span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true"></span>
-                        </button>
+<div class="mt-2 p-4 bg-white shadow-md rounded-lg">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#formulario" data-bs-toggle="tab">Principal</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#grafico1" data-bs-toggle="tab">Estoque Análise de
+                Acordão</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#grafico2" data-bs-toggle="tab">Estoque Instrução de Recurso</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3">
+        <div id="formulario" class="tab-pane show active">
+            <div class="container mx-auto mt-3">
+                <div class="flex justify-center">
+                    <div class="form-container">
+                        <div class="bg-white shadow-md rounded-lg">
+                            <div class="p-4 border-b">
+                                <h2 class="text-2xl font-bold">Status da Aplicação</h2>
+                                <br>
+                                {% if status_api.status == "Online" %}
+                                <p class="text-sm text-green-600">
+                                    <i class="fa-solid fa-circle-check mr-2"></i>
+                                    A API está <span class="font-semibold" id="apiStatus1">Online</span>
+                                </p>
+                                {% else %}
+                                <p class="text-sm text-red-600">
+                                    <i class="fa-solid fa-circle-exclamation mr-2"></i>
+                                    A API está <span class="font-semibold" id="apiStatus2">Offline</span>
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="p-4">
+
+                                <div id="alertContainer" class="alert alert-success alert-dismissible fade show"
+                                     role="alert" style="display: none;">
+                                    <span id="alertMessage">Solicitação atendida com sucesso.</span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"></span>
+                                    </button>
+                                </div>
+
+                                <form id="registrarSolicitacao" method="POST" class="space-y-4">
+                                    <div>
+                                        <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
+                                        <select id="tipo" name="tipo" required
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                            <option value="">Selecione uma opção</option>
+                                            <option value="Solicitar Tarefas BI">Solicitar Tarefas BI</option>
+                                            <option value="Solicitar Tarefas de Análise de Acordão">Solicitar Tarefas de
+                                                Análise de Acordão
+                                            </option>
+                                            <option value="Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO">
+                                                Solicitar
+                                                Tarefas de Análise de Acordão - NÃO PROVIDO
+                                            </option>
+                                            <option value="Solicitar Tarefas de Instrução de Recurso">Solicitar Tarefas
+                                                de
+                                                Instrução de Recurso
+                                            </option>
+                                            <option value="Transferir tarefa">Transferir tarefa</option>
+                                            <option value="Excluir responsável">Excluir responsável</option>
+                                            <option value="Atribuir responsável">Atribuir responsável</option>
+                                        </select>
+                                    </div>
+                                    <div class="hidden">
+                                        <label for="protocolo"
+                                               class="block text-sm font-medium text-gray-700">Protocolo</label>
+                                        <input type="text" id="protocolo" name="protocolo"
+                                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label for="solicitante" class="block text-sm font-medium text-gray-700">Siape
+                                            solicitante</label>
+                                        <input type="text" id="solicitante" name="solicitante" required
+                                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div class="hidden">
+                                        <label for="matricula"
+                                               class="block text-sm font-medium text-gray-700">Matrícula</label>
+                                        <input type="text" id="matricula" name="matricula"
+                                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div class="hidden">
+                                        <label for="especie" class="block text-sm font-medium text-gray-700">Cód.
+                                            Espécie</label>
+                                        <input type="text" id="especie" name="especie"
+                                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div class="hidden">
+                                        <label for="unidade"
+                                               class="block text-sm font-medium text-gray-700">Unidade</label>
+                                        <input type="text" id="unidade" name="unidade"
+                                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div class="flex justify-center">
+                                        <button type="submit"
+                                                class="px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-700 relative">
+                                            Registrar
+                                            <i id="spinner" class="fas fa-spinner fa-spin"
+                                               style="display: none; margin-left: 5px;"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
 
-                    <form id="registrarSolicitacao" method="POST" class="space-y-4">
-                        <div>
-                            <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
-                            <select id="tipo" name="tipo" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="">Selecione uma opção</option>
-                                <option value="Solicitar Tarefas BI">Solicitar Tarefas BI</option>
-                                <option value="Solicitar Tarefas de Análise de Acordão">Solicitar Tarefas de Análise de Acordão</option>
-                                <option value="Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO">Solicitar Tarefas de Análise de Acordão - NÃO PROVIDO</option>
-                                <option value="Solicitar Tarefas de Instrução de Recurso">Solicitar Tarefas de Instrução de Recurso</option>
-                                <option value="Transferir tarefa">Transferir tarefa</option>
-                                <option value="Excluir responsável">Excluir responsável</option>
-                                <option value="Atribuir responsável">Atribuir responsável</option>
-                            </select>
+                    <div class="bg-white shadow-md rounded-md" style="margin-left: 20px;">
+                        <div class="p-4">
+                            Portal de solicitações da GEX Anápolis tem como propósito proporcionar maior transparência e
+                            agilidade no processamento das requisições dos servidores da GEX ANAPOLIS.
+                            Cada solicitação será registrada em um registro (log) e sujeita a auditorias periódicas.
+                            Após clicar em "Registrar", aguarde 30 segundos e atualize a página para visualizar o
+                            resultado
+                            da operação na tabela de registro de Solicitações.
                         </div>
-                        <div class="hidden">
-                            <label for="protocolo" class="block text-sm font-medium text-gray-700">Protocolo</label>
-                            <input type="text" id="protocolo" name="protocolo" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div>
-                            <label for="solicitante" class="block text-sm font-medium text-gray-700">Siape solicitante</label>
-                            <input type="text" id="solicitante" name="solicitante" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div class="hidden">
-                            <label for="matricula" class="block text-sm font-medium text-gray-700">Matrícula</label>
-                            <input type="text" id="matricula" name="matricula" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div class="hidden">
-                            <label for="especie" class="block text-sm font-medium text-gray-700">Cód. Espécie</label>
-                            <input type="text" id="especie" name="especie" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div class="hidden">
-                            <label for="unidade" class="block text-sm font-medium text-gray-700">Unidade</label>
-                            <input type="text" id="unidade" name="unidade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div class="flex justify-center">
-                            <button type="submit" class="px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-700 relative">
-                                Registrar
-                                <i id="spinner" class="fas fa-spinner fa-spin" style="display: none; margin-left: 5px;"></i>
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white shadow-md rounded-md" style="margin-left: 20px;">
-            <div class="p-4">
-                Portal de solicitações da GEX Anápolis tem como propósito proporcionar maior transparência e agilidade no processamento das requisições dos servidores da GEX ANAPOLIS.
-                Cada solicitação será registrada em um registro (log) e sujeita a auditorias periódicas.
-                Após clicar em "Registrar", aguarde 30 segundos e atualize a página para visualizar o resultado da operação na tabela de registro de Solicitações.
+        <div id="grafico1" class="tab-pane">
+            <div class="container mt-2 bg-white rounded-lg shadow-md">
+                <div class="graficos-container">
+                    <div class="grafico1 bg-white rounded-lg" id="grafico-estoque"></div>
+                </div>
+            </div>
+            <div class="container mt-2 bg-white rounded-lg shadow-md">
+                <div class="grafico mt-2 col-md-12 bg-white rounded-lg" id="grafico-estoque-especie"></div>
+            </div>
+        </div>
+
+        <div id="grafico2" class="tab-pane">
+            <div class="container mt-2 bg-white rounded-lg shadow-md">
+                <div class="graficos-container">
+                    <div class="grafico1 bg-white rounded-lg" id="grafico-estoque-instrucao"></div>
+                </div>
             </div>
         </div>
     </div>
 
-<div class="container mt-2 bg-white rounded-lg mb-2 shadow-md">
-    <div class="graficos-container">
-        <div class="grafico1 bg-white rounded-lg" id="grafico-estoque"></div>
-        <div class="grafico1 bg-white rounded-lg" id="grafico-estoque-instrucao"></div>
-    </div>
 </div>
 
-
-<div class="grafico mt-2 col-md-12 bg-white shadow-md rounded-lg" id="grafico-estoque-especie"></div>
-<div class="graficos-container mt-5"></div>
-</div>
-
-<div class="mt-3 card">
+<div class="card mt-2 rounded-lg">
     <div class="row" style="margin-top: 0px; margin-left: 10px; margin-right: 10px;">
-    <h3 class="mt-3 text-center custom-title">Registro de Solicitações</h3>
-    <div class="table-responsive mt-3">
-        <table id="tabela" class="table table-striped table-hover table-borderless table-sm table align-middle compact">
-            <thead class="table-secondary">
+        <h3 class="text-center custom-title">Registro de Solicitações</h3>
+        <div class="table-responsive">
+            <table id="tabela"
+                   class="table table-striped table-hover table-borderless table-sm table align-middle compact">
+                <thead class="table-secondary">
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Protocolo</th>
@@ -209,8 +266,8 @@ body {
                     <th scope="col">Data Solicitação</th>
                     <th scope="col">Status</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 {% for solicitacao in solicitacoes %}
                 <tr>
                     <td>{{ solicitacao.id or ''}}</td>
@@ -223,68 +280,64 @@ body {
                     <td>{{ solicitacao.status or ''}}</td>
                 </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-   </div>
 </div>
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var tipoSelect = document.getElementById('tipo');
-    var protocoloInput = document.getElementById('protocolo');
-    var solicitanteInput = document.getElementById('solicitante');
-    var especieInput = document.getElementById('especie');
-    var matriculaInput = document.getElementById('matricula'); // Adicione esta linha para definir a variável matriculaInput
-    var form = document.getElementById('registrarSolicitacao');
+    document.addEventListener('DOMContentLoaded', function() {
+        var tipoSelect = document.getElementById('tipo');
+        var protocoloInput = document.getElementById('protocolo');
+        var solicitanteInput = document.getElementById('solicitante');
+        var especieInput = document.getElementById('especie');
+        var matriculaInput = document.getElementById('matricula'); // Adicione esta linha para definir a variável matriculaInput
+        var form = document.getElementById('registrarSolicitacao');
 
-    function toggleFields(selectedOption) {
-        if (selectedOption === 'Transferir tarefa' || selectedOption === 'Excluir responsável' || selectedOption === 'Atribuir responsável') {
-            protocoloInput.parentNode.classList.remove('hidden');
-        } else {
-            protocoloInput.parentNode.classList.add('hidden');
+        function toggleFields(selectedOption) {
+            if (selectedOption === 'Transferir tarefa' || selectedOption === 'Excluir responsável' || selectedOption === 'Atribuir responsável') {
+                protocoloInput.parentNode.classList.remove('hidden');
+            } else {
+                protocoloInput.parentNode.classList.add('hidden');
+            }
+
+            if (selectedOption === 'Atribuir responsável') {
+                matriculaInput.parentNode.classList.remove('hidden');
+            } else {
+                matriculaInput.parentNode.classList.add('hidden');
+            }
+
+            // Mostra o campo "Espécie" apenas quando "Solicitar Tarefas de Análise de Acordão" é selecionado
+            if (selectedOption === 'Solicitar Tarefas de Análise de Acordão') {
+                especieInput.parentNode.classList.remove('hidden');
+            } else {
+                especieInput.parentNode.classList.add('hidden');
+            }
         }
 
-        if (selectedOption === 'Atribuir responsável') {
-            matriculaInput.parentNode.classList.remove('hidden');
-        } else {
-            matriculaInput.parentNode.classList.add('hidden');
-        }
+        // Adiciona validação adicional antes do envio do formulário
+        form.addEventListener('submit', function(event) {
+            var tipo = tipoSelect.value;
+            var protocolo = protocoloInput.value.trim();
+            var solicitante = solicitanteInput.value.trim();
+            var especie = especieInput.value.trim();
 
-        // Mostra o campo "Espécie" apenas quando "Solicitar Tarefas de Análise de Acordão" é selecionado
-        if (selectedOption === 'Solicitar Tarefas de Análise de Acordão') {
-            especieInput.parentNode.classList.remove('hidden');
-        } else {
-            especieInput.parentNode.classList.add('hidden');
-        }
-    }
+            // Verifica as opções 'Transferir tarefa', 'Excluir responsável', 'Atribuir responsável'
+            if ((tipo === 'Transferir tarefa' || tipo === 'Excluir responsável' || tipo === 'Atribuir responsável') && !protocolo) {
+                alert('Por favor, preencha o campo Protocolo.');
+                event.preventDefault(); // Impede o envio do formulário
+            }
+        });
 
-    // Adiciona validação adicional antes do envio do formulário
-    form.addEventListener('submit', function(event) {
-        var tipo = tipoSelect.value;
-        var protocolo = protocoloInput.value.trim();
-        var solicitante = solicitanteInput.value.trim();
-        var especie = especieInput.value.trim();
+        tipoSelect.addEventListener('change', function() {
+            toggleFields(this.value);
+        });
 
-        // Verifica as opções 'Transferir tarefa', 'Excluir responsável', 'Atribuir responsável'
-        if ((tipo === 'Transferir tarefa' || tipo === 'Excluir responsável' || tipo === 'Atribuir responsável') && !protocolo) {
-            alert('Por favor, preencha o campo Protocolo.');
-            event.preventDefault(); // Impede o envio do formulário
-        }
+        toggleFields(tipoSelect.value);
     });
-
-    tipoSelect.addEventListener('change', function() {
-        toggleFields(this.value);
-    });
-
-    toggleFields(tipoSelect.value);
-});
 </script>
-
-
-
-
 
 
 <script>
@@ -311,8 +364,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Continuar com o restante dos gráficos conforme necessário
     });
 </script>
-
-
 
 
 <script>
@@ -358,90 +409,89 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-$(document).ready(function() {
-    // Inicialização da primeira tabela
-    $('#tabela').DataTable({
-        language: {
-            url: '{{ url_for('static', filename='pt-BR.json') }}',
-        },
-        order: [[0, 'desc']] // Ordena pela primeira coluna em ordem ascendente
+    $(document).ready(function() {
+        // Inicialização da primeira tabela
+        $('#tabela').DataTable({
+            language: {
+                url: '{{ url_for('static', filename='pt-BR.json') }}',
+            },
+            order: [[0, 'desc']] // Ordena pela primeira coluna em ordem ascendente
+        });
     });
-});
 </script>
 
 <script>
-document.getElementById('registrarSolicitacao').addEventListener('submit', function(e) {
-    e.preventDefault();  // Previne o envio tradicional do formulário
+    document.getElementById('registrarSolicitacao').addEventListener('submit', function(e) {
+        e.preventDefault();  // Previne o envio tradicional do formulário
 
-    // Exibe o spinner dentro do botão e desabilita o botão
-    var spinner = document.getElementById('spinner');
-    var button = this.querySelector('button');
-    console.log('Exibindo spinner');
-    spinner.style.display = 'inline-block';  // Ou 'block', dependendo da sua preferência
-    button.disabled = true;  // Opcional: desabilita o botão durante o carregamento
+        // Exibe o spinner dentro do botão e desabilita o botão
+        var spinner = document.getElementById('spinner');
+        var button = this.querySelector('button');
+        console.log('Exibindo spinner');
+        spinner.style.display = 'inline-block';  // Ou 'block', dependendo da sua preferência
+        button.disabled = true;  // Opcional: desabilita o botão durante o carregamento
 
-    var formData = new FormData(this);
-    fetch('/registrar', {
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => response.json())  // Converte a resposta para JSON
-    .then(data => {
-        if (data.success) {
-            checkStatus(data.id);  // Inicia a verificação do status
-        } else {
-            // Em caso de falha no envio, esconde o spinner e reabilita o botão
+        var formData = new FormData(this);
+        fetch('/registrar', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())  // Converte a resposta para JSON
+        .then(data => {
+            if (data.success) {
+                checkStatus(data.id);  // Inicia a verificação do status
+            } else {
+                // Em caso de falha no envio, esconde o spinner e reabilita o botão
+                spinner.style.display = 'none';
+                button.disabled = false;
+                // Handle error
+                displayAlert(data.message, 'alert-danger'); // Mostra a mensagem de erro com alerta personalizado
+            }
+        }).catch(error => {
+            console.error('Error:', error);
             spinner.style.display = 'none';
             button.disabled = false;
-            // Handle error
-            displayAlert(data.message, 'alert-danger'); // Mostra a mensagem de erro com alerta personalizado
-        }
-    }).catch(error => {
-        console.error('Error:', error);
-        spinner.style.display = 'none';
-        button.disabled = false;
-        displayAlert('Ocorreu um erro ao enviar a solicitação.', 'alert-danger');
+            displayAlert('Ocorreu um erro ao enviar a solicitação.', 'alert-danger');
+        });
     });
-});
 
-// Definir as variáveis spinner e button globalmente
-var spinner = document.getElementById('spinner');
-var button = document.querySelector('#registrarSolicitacao button');
+    // Definir as variáveis spinner e button globalmente
+    var spinner = document.getElementById('spinner');
+    var button = document.querySelector('#registrarSolicitacao button');
 
-function checkStatus(id) {
-    fetch('/verificar-status/' + id)
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'concluido') {
-            // Não precisa mais exibir o spinner e desabilitar o botão aqui
+    function checkStatus(id) {
+        fetch('/verificar-status/' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'concluido') {
+                // Não precisa mais exibir o spinner e desabilitar o botão aqui
 
-            // Substituir o alerta tradicional pela função de exibição do alerta personalizado
-            displayAlert('Solicitação Concluída', 'alert-success');
+                // Substituir o alerta tradicional pela função de exibição do alerta personalizado
+                displayAlert('Solicitação Concluída', 'alert-success');
 
-            // Definir um atraso antes de recarregar a página para permitir que o usuário veja a mensagem
-            setTimeout(function() {
-                window.location.reload(); // Recarregar a página
-            }, 3000); // Ajustar o atraso conforme necessário
-        } else {
-            // Se ainda pendente, verifica novamente
-            checkStatus(id);
-        }
-    });
-}
+                // Definir um atraso antes de recarregar a página para permitir que o usuário veja a mensagem
+                setTimeout(function() {
+                    window.location.reload(); // Recarregar a página
+                }, 3000); // Ajustar o atraso conforme necessário
+            } else {
+                // Se ainda pendente, verifica novamente
+                checkStatus(id);
+            }
+        });
+    }
 
-function displayAlert(message, alertType) {
-    const alertContainer = document.getElementById('alertContainer');
-    const alertMessage = document.getElementById('alertMessage');
+    function displayAlert(message, alertType) {
+        const alertContainer = document.getElementById('alertContainer');
+        const alertMessage = document.getElementById('alertMessage');
 
-    // Define a classe de alerta baseada no tipo de alerta
-    alertContainer.className = `alert ${alertType} alert-dismissible fade show`;
-    alertMessage.textContent = message; // Define a mensagem do alerta
+        // Define a classe de alerta baseada no tipo de alerta
+        alertContainer.className = `alert ${alertType} alert-dismissible fade show`;
+        alertMessage.textContent = message; // Define a mensagem do alerta
 
-    // Exibe o alerta
-    alertContainer.style.display = 'block';
-}
+        // Exibe o alerta
+        alertContainer.style.display = 'block';
+    }
 </script>
-
 
 
 {% endblock %}
