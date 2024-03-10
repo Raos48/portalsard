@@ -1,24 +1,24 @@
 import os
-import urllib3
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from urllib3.exceptions import InsecureRequestWarning
 import time
 import json
 import requests
 from datetime import datetime
 import mysql.connector
 from datetime import datetime, timedelta
+import urllib3 
 
-# Desabilitando avisos de segurança para demonstração, mas não recomendado para produção
-requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 pasta_raiz = os.getcwd()
 headers_file_path = os.path.join(pasta_raiz, 'headers.txt')
 
-
+# # Caminho para o seu certificado .pem baixado
+# custom_certificate_path = "./meu_certificado.pem"
 
 class TokenFetcher:
     def __init__(self):
@@ -35,8 +35,7 @@ class TokenFetcher:
             print(f"Erro ao carregar headers: {e}")
 
         try:
-            requisicao = requests.get("https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/888296716",
-                                      verify=False, headers=self.headers)
+            requisicao = requests.get("https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/888296716",verify=False, headers=self.headers)
             if requisicao.status_code != 200:
                 print(f"Erro na requisição. Código de status: {requisicao.status_code}")
                 print(f"API Offline - Data e hora: {current_time}")
@@ -72,11 +71,31 @@ class TokenFetcher:
                 js_script = "return localStorage.getItem('ifs_auth');"
                 js_script2 = "return localStorage.getItem('srv_auth');"
                 resultado = driver.execute_script(js_script)
-                token = driver.execute_script(js_script2)
-                urllib3.disable_warnings()
+                token = driver.execute_script(js_script2)                
                 self.headers = {'Authorization': 'Bearer ' + resultado, 'Content-type': 'application/json',
                                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
                                 'tokenservidor': token, 'Accept': 'application/json'}
+
+                # self.headers = {
+                #     'Accept': 'application/json',
+                #     'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+                #     'Authorization': 'Bearer ' + resultado,
+                #     'Connection': 'keep-alive',
+                #     'Content-Type': 'application/json',
+                #     'Cookie': '_pk_id.31.9ff2=44f8034a34099fa2.1709990667.; _pk_ref.31.9ff2=%5B%22%22%2C%22%22%2C1710081789%2C%22https%3A%2F%2Fgeridinss.dataprev.gov.br%3A8443%2F%22%5D; _pk_ses.31.9ff2=1',
+                #     'DNT': '1',
+                #     'Origin': 'https://atendimento.inss.gov.br',
+                #     'Referer': 'https://atendimento.inss.gov.br/',
+                #     'Sec-Fetch-Dest': 'empty',
+                #     'Sec-Fetch-Mode': 'cors',
+                #     'Sec-Fetch-Site': 'same-origin',
+                #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                #     'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+                #     'sec-ch-ua-mobile': '?0',
+                #     'sec-ch-ua-platform': '"Windows"',
+                #     'tokenServidor': token,
+                # }
+
                 driver.quit()
                 with open('headers.txt', 'w') as file:
                     file.write(json.dumps(self.headers))
@@ -178,8 +197,7 @@ class TokenFetcher:
 
                             if tipo == "Transferir tarefa":
                                 payload = "{'justificativa':'Transferencia para unidade responsavel.'}"
-                                requisicao = requests.put(
-                                    f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/{sard_gex_anp}?retornarTarefa=true',
+                                requisicao = requests.put(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}/transferencia/{sard_gex_anp}?retornarTarefa=true',
                                     verify=False, headers=self.headers, data=payload)
                                 resposta = requisicao.json()
                                 mensagem = resposta['mensagem']
@@ -232,7 +250,6 @@ class TokenFetcher:
                                         if responsavel['siape'] == int(solicitante):
                                             id_responsavel = responsavel['id']
                                             break
-
 
                                     requisicao_delete = requests.delete( f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',verify=False, headers=self.headers)
                                     if requisicao_delete.status_code == 200:
@@ -477,9 +494,7 @@ class TokenFetcher:
                                     protocolo = subtarefa
 
                                     # verificar responsáveis
-                                    requisicao = requests.get(
-                                        f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
-                                        verify=False, headers=self.headers)
+                                    requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}', verify=False, headers=self.headers)
                                     if requisicao.status_code != 200:
                                         print(f"Erro na requisição. Código de status: {requisicao.status_code}")
                                         continue
@@ -797,7 +812,7 @@ class TokenFetcher:
                                 limite = 0
 
                                 while limite != 5:
-
+                                    print()
                                     sql_query_instrucao = """
                                     SELECT id, subtarefa
                                     FROM instrucao
@@ -815,9 +830,24 @@ class TokenFetcher:
                                     id, subtarefa = registro
                                     protocolo = subtarefa
 
+                                    # verificar responsáveis
+                                    requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}', verify=False, headers=self.headers)
+                                    if requisicao.status_code != 200:
+                                        print(f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                        continue
+                                    tarefa = requisicao.json()
+                                    responsaveis = tarefa['responsaveis']['responsaveis']
+                                    if len(responsaveis) != 0:
+                                        status = "Tarefa já possui responsável"
+                                        sql_update_estoque = "UPDATE instrucao SET status = %s WHERE subtarefa = %s"
+                                        cursor.execute(sql_update_estoque, (status, protocolo))
+                                        connection.commit()
+                                        print(f"tarefa já possui responsável atribuído.")
+                                        print(protocolo, status)
+                                        continue
+
                                     # identificar Unidade
-                                    requisicao = requests.get(
-                                        f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
+                                    requisicao = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',
                                         verify=False, headers=self.headers)
                                     if requisicao.status_code != 200:
                                         print(requisicao.text)

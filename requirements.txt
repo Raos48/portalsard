@@ -10,7 +10,6 @@ blinker==1.7.0
 bottle==0.12.25
 bottle-websocket==0.2.9
 certifi==2023.5.7
-cffi==1.15.1
 chardet==3.0.4
 charset-normalizer==3.1.0
 click==8.1.7
