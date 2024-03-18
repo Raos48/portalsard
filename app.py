@@ -12,6 +12,8 @@ from flask import Flask, request, render_template, redirect, url_for
 import plotly.graph_objs as go
 from sqlalchemy.exc import OperationalError
 
+#Atualização
+
 #conexão local
 # DEBUG = True
 # USERNAME = 'root'

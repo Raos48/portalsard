@@ -11,7 +11,7 @@ import mysql.connector
 from datetime import datetime, timedelta
 import urllib3 
 
-
+#Atualização
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 pasta_raiz = os.getcwd()
