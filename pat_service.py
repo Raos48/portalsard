@@ -17,9 +17,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 pasta_raiz = os.getcwd()
 headers_file_path = os.path.join(pasta_raiz, 'headers.txt')
 
-# # Caminho para o seu certificado .pem baixado
-# custom_certificate_path = "./meu_certificado.pem"
-
 class TokenFetcher:
     def __init__(self):
         self.setup_driver()
@@ -206,8 +203,6 @@ class TokenFetcher:
                                 sql_update = "UPDATE solicitacoes SET status = %s WHERE id = %s"
                                 cursor.execute(sql_update, (status, id_solicitacao))
                                 connection.commit()
-
-
                             elif tipo == "Atribuir responsável":
                                 siape_procurado = matricula
                                 id_responsavel = None
@@ -226,7 +221,6 @@ class TokenFetcher:
                                 cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
                                 connection.commit()
                                 print(f"Registro {id_solicitacao} processado com sucesso.")
-
                             elif tipo == 'Excluir responsável':
                                 requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}', verify=False, headers=self.headers)
                                 if requisicao_get.status_code == 200:
@@ -245,53 +239,39 @@ class TokenFetcher:
                                         connection.commit()
                                         print(f"Registro {id_solicitacao} processado com sucesso.")
                                         break
-
+                                    id_responsavel = None
                                     for responsavel in responsaveis:
                                         if responsavel['siape'] == int(solicitante):
                                             id_responsavel = responsavel['id']
                                             break
-
-                                    requisicao_delete = requests.delete( f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',verify=False, headers=self.headers)
-                                    if requisicao_delete.status_code == 200:
-                                        print(f"Exclusão do responsável efetuada com sucesso")
-                                        status = "Exclusão do responsável efetuada com sucesso"
+                                    if id_responsavel is not None:
+                                        requisicao_delete = requests.delete( f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',verify=False, headers=self.headers)
+                                        if requisicao_delete.status_code == 200:
+                                            print(f"Exclusão do responsável efetuada com sucesso")
+                                            status = "Exclusão do responsável efetuada com sucesso"
+                                            dt_conclusao = datetime.now()
+                                            sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                            cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
+                                            connection.commit()
+                                            print(f"Registro {id_solicitacao} processado com sucesso.")
+                                        else:
+                                            print( f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
+                                    else:
+                                        # Se o id_responsavel é None, executa o código adicional para tratar o erro
+                                        print("A matrícula fornecida não está associada como responsável pela tarefa.")
+                                        status = "A matrícula fornecida não está associada como responsável pela tarefa."
                                         dt_conclusao = datetime.now()
                                         sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
                                         cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
                                         connection.commit()
-                                        print(f"Registro {id_solicitacao} processado com sucesso.")
-                                    else:
-                                        print( f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
-
-                                    # if len(responsaveis) != 0:
-                                    #     for responsavel in responsaveis:
-                                    #         id_responsavel = responsavel['id']
-                                    #         requisicao_delete = requests.delete( f'https://atendimento.inss.gov.br/apis/tarefasApi/responsaveis/{id_responsavel}/tarefa/{protocolo}',verify=False, headers=self.headers)
-                                    #         if requisicao_delete.status_code == 200:
-                                    #             print(f"Exclusão do responsável efetuada com sucesso")
-                                    #             status = "Exclusão do responsável efetuada com sucesso"
-                                    #             dt_conclusao = datetime.now()
-                                    #             sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                    #             cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
-                                    #             connection.commit()
-                                    #             print(f"Registro {id_solicitacao} processado com sucesso.")
-                                    #         else:
-                                    #             print( f"Erro na requisição DELETE para o responsável {id_responsavel}. Código de status: {requisicao_delete.status_code}")
-                                    # else:
-                                    #     print("Não há responsáveis na tarefa.")
-                                    #     status = "Não há responsáveis na tarefa."
-                                    #     dt_conclusao = datetime.now()
-                                    #     sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                    #     cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
-                                    #     connection.commit()
-                                    #     print(f"Registro {id_solicitacao} processado com sucesso.")
+                                        print(f"Registro {id_solicitacao} processado com sucesso.")                                       
 
                                 else:
                                     print(f"Erro na requisição GET. Código de status: {requisicao_get.status_code}")
-                                    status = "Erro na requisição GET. Código de status: {requisicao_get.status_code}"
+                                    status = "Erro na requisição GET. Código de status: protocolo inválido"
                                     dt_conclusao = datetime.now()
-                                    sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                    cursor.execute(sql_update, (status, dt_conclusao, id_solicitacao))
+                                    sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE protocolo = %s"
+                                    cursor.execute(sql_update, (status, dt_conclusao, protocolo))
                                     connection.commit()
 
                         if protocolo is None:
@@ -319,7 +299,7 @@ class TokenFetcher:
 
                                     params = {
                                         "indexVisao": 2,
-                                        "limit": 5,
+                                        "limit": 30,
                                         "offset": 0,
                                         "sort_by": "DATA_ENTRADA_REQUERIMENTO",
                                         "order_by": "ASCENDING"
@@ -341,15 +321,11 @@ class TokenFetcher:
                                         "grupoServicos": [
                                             {"label": "Benefício por Incapacidade", "value": "123", "id": 123}],
                                         "servicos": [
-                                            {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473",
-                                             "id": 5473},
-                                            {"label": "Auxílio-Doença - Urbano (Acerto Pós-perícia) - TADU",
-                                             "value": "5474", "id": 5474}
+                                            {"label": "Auxílio-Doença - Rural (Acerto Pós-perícia) - TADR", "value": "5473","id": 5473},{"label": "Auxílio-Doença - Urbano (Acerto Pós-perícia) - TADU","value": "5474", "id": 5474}
                                         ]
                                     }
 
                                     response = requests.post(url, json=data, headers=self.headers, params=params)
-
                                     if response.status_code == 204:
                                         try:
                                             # Prepara a query SQL para selecionar o ID
@@ -383,74 +359,101 @@ class TokenFetcher:
 
                                     response_json = response.json()
                                     protocolos = [item['numeroProtocolo'] for item in response_json]
-
+                                    
+                                    contador = 0
+                                    servidor = '{"responsaveis":[{"id":' + id_responsavel + '}]}'
+                                    sucesso = False
                                     for protocolo in protocolos:
-                                        servidor = '{"responsaveis":[{"id":' + id_responsavel + '}]}'
-                                        sucesso = False
-                                        while not sucesso:
-                                            try:
-                                                requisicao_get = requests.get(
-                                                    f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
-                                                    verify=False, headers=self.headers)
-                                                if requisicao_get.status_code == 200:
-                                                    tarefa = requisicao_get.json()
-                                                    responsaveis = tarefa['responsaveis']['responsaveis']
-                                                    if len(responsaveis) == 0:
-                                                        requisicao = requests.post(
-                                                            f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',
-                                                            verify=False, headers=self.headers, data=servidor)
-                                                        if requisicao.status_code != 200:
-                                                            print(
-                                                                f"Erro na requisição. Código de status: {requisicao.status_code}")
-                                                            sucesso = True
-                                                            continue
-                                                        else:
-                                                            print(
-                                                                f"Erro na requisição. Código de status: {requisicao.status_code}")
+                                        try:
+                                            print("==============================================")
+                                            print(f"protocolo:{protocolo}, contador{contador}")
+                                            if contador == 5:
+                                                print("Distribuição tarefas finalizada")                                            
+                                                sql_query = """
+                                                SELECT id
+                                                FROM solicitacoes
+                                                WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
+                                                """
+                                                cursor.execute(sql_query)
+                                                resultado = cursor.fetchone()
+                                                id_distribuir = resultado[0]
+                                                dt_conclusao = datetime.now()
+                                                status = "Tarefas Distribuídas com sucesso."
+                                                sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
+                                                cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
+                                                connection.commit()
+                                                print("Distribuição Finalizada")
+                                                print()                                            
+                                                break
+                                            requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers)
+                                            if requisicao_get.status_code == 200:
+                                                tarefa = requisicao_get.json()
+                                                responsaveis = tarefa['responsaveis']['responsaveis']
+                                                if len(responsaveis) == 0:
+                                                    requisicao = requests.post(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers, data=servidor)
+                                                    if requisicao.status_code == 200:
+                                                        tipo = 'Solicitar Tarefas BI'
+                                                        matricula = siape_procurado
+                                                        solicitante = siape_procurado
+                                                        status = "Responsável incluído com sucesso."
+                                                        sql_insert = """
+                                                        INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
+                                                        VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                                        """
+                                                        valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(),datetime.now())
+                                                        cursor.execute(sql_insert, valores)
+                                                        connection.commit()
+                                                        print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                                        contador += 1
                                                     else:
-                                                        print("Tarefa já possui responsável..")
-                                                        sucesso = True
-                                                        pass
+                                                        print(f"Requisição {protocolo} falhou - looping - contador {contador} - tentar novamente.")
+                                                        continue
+                                                                                                            
                                                 else:
-                                                    print("Requisição falhou - looping - tentar novamente.")
-                                                    continue
-                                            except Exception as e:
-                                                print(f"Erro ao fazer a requisição: {e}")
+                                                    print(f"Tarefa {protocolo} possui responsável - contador {contador}")
+                                                    pass
+                                            else:
+                                                print(f"Requisição falhou {protocolo} - looping - contador {contador}- tentar novamente.")
+                                                continue                                            
+                                        except Exception as e:
+                                            print(f"Erro - {protocolo} - contador {contador} : {e}")
 
-                                        tipo = 'Solicitar Tarefas BI'
-                                        matricula = siape_procurado
-                                        solicitante = siape_procurado
-                                        status = "Responsável incluído com sucesso."
+                                        # while not sucesso:
+                                        #     try:
+                                        #         requisicao_get = requests.get(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers)
+                                        #         if requisicao_get.status_code == 200:
+                                        #             tarefa = requisicao_get.json()
+                                        #             responsaveis = tarefa['responsaveis']['responsaveis']
+                                        #             if len(responsaveis) == 0:
+                                        #                 requisicao = requests.post(f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}',verify=False, headers=self.headers, data=servidor)
+                                        #                 if requisicao.status_code != 200:
+                                        #                     print(f"Erro req. POST para atribuir responsável na tarefa {protocolo} Código de status: {requisicao.status_code} - tentar novamente")                                                     
+                                        #                     continue
+                                        #                 else:
+                                        #                     tipo = 'Solicitar Tarefas BI'
+                                        #                     matricula = siape_procurado
+                                        #                     solicitante = siape_procurado
+                                        #                     status = "Responsável incluído com sucesso."
+                                        #                     sql_insert = """
+                                        #                     INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
+                                        #                     VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                        #                     """
+                                        #                     valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(),datetime.now())
+                                        #                     cursor.execute(sql_insert, valores)
+                                        #                     connection.commit()
+                                        #                     print(f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
+                                        #                     sucesso = True
+                                        #                     pass
+                                        #             else:
+                                        #                 print("Tarefa já possui responsável..")
+                                        #                 sucesso = True
+                                        #                 pass
+                                        #         else:
+                                        #             print("Requisição falhou - looping - tentar novamente.")
+                                        #             continue
+                                        #     except Exception as e:
+                                        #         print(f"Erro ao fazer a requisição: {e}")
 
-                                        sql_insert = """
-                                        INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
-                                        VALUES (%s, %s, %s, %s, %s, %s, %s)
-                                        """
-
-                                        valores = (
-                                            protocolo, matricula, solicitante, tipo, status, datetime.now(),
-                                            datetime.now())
-                                        cursor.execute(sql_insert, valores)
-                                        connection.commit()
-                                        print(
-                                            f"Tarefa Distribuída com sucesso:{protocolo}, {matricula}, {solicitante}, {tipo}, {status}, {datetime.now()}, {datetime.now()}")
-
-                                    # Finalizou Distribuição
-                                    sql_query = """
-                                    SELECT id
-                                    FROM solicitacoes
-                                    WHERE protocolo IS NULL AND tipo = 'Solicitar Tarefas BI' AND (status IS NULL OR status = '')
-                                    """
-                                    cursor.execute(sql_query)
-                                    resultado = cursor.fetchone()
-                                    id_distribuir = resultado[0]
-                                    dt_conclusao = datetime.now()
-                                    status = "Tarefas Distribuídas com sucesso."
-                                    sql_update = "UPDATE solicitacoes SET status = %s, dt_conclusao = %s WHERE id = %s"
-                                    cursor.execute(sql_update, (status, dt_conclusao, id_distribuir))
-                                    connection.commit()
-                                    print("Distribuição Finalizada")
-                                    print()
                             if tipo and tipo[0] == "Solicitar Tarefas de Análise de Acordão":
                                 sql_query = """
                                 SELECT solicitante,especie
@@ -544,8 +547,7 @@ class TokenFetcher:
 
                                     servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
                                     url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
-                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,
-                                                               data=servidor)
+                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,                                                              data=servidor)
                                     if requisicao.status_code != 200:
                                         print(
                                             f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
@@ -730,8 +732,7 @@ class TokenFetcher:
 
                                         servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
                                         url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
-                                        requisicao = requests.post(url_da_api, verify=False, headers=self.headers,
-                                                                   data=servidor)
+                                        requisicao = requests.post(url_da_api, verify=False, headers=self.headers,data=servidor)
                                         if requisicao.status_code != 200:
                                             print(
                                                 f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
@@ -749,8 +750,7 @@ class TokenFetcher:
                                             INSERT INTO solicitacoes (protocolo, matricula, solicitante, tipo, status, dt_solicitacao, dt_conclusao)
                                             VALUES (%s, %s, %s, %s, %s, %s, %s)
                                             """
-                                            valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(),
-                                                       datetime.now())
+                                            valores = (protocolo, matricula, solicitante, tipo, status, datetime.now(),datetime.now())
                                             cursor.execute(sql_insert, valores)
                                             connection.commit()
                                             print(
@@ -888,8 +888,7 @@ class TokenFetcher:
 
                                     servidor = '{"responsaveis":[{"id":' + str(id_responsavel) + '}]}'
                                     url_da_api = f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/responsaveis/{protocolo}'
-                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,
-                                                               data=servidor)
+                                    requisicao = requests.post(url_da_api, verify=False, headers=self.headers,data=servidor)
                                     if requisicao.status_code != 200:
                                         print(
                                             f"Erro na requisição para o protocolo {protocolo}. Código de status: {requisicao.status_code}")
