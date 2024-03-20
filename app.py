@@ -15,12 +15,13 @@ from sqlalchemy.exc import OperationalError
 #Atualização
 
 #conexão local
-# DEBUG = True
-# USERNAME = 'root'
-# PASSWORD = 'root'
-# SERVER = 'localhost'
-# DB = 'db_sard'
-# SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
+DEBUG = True
+USERNAME = 'root'
+PASSWORD = 'root'
+SERVER = 'localhost'
+DB = 'db_sard'
+PORT = '3306'
+SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
 
 #conexão RDS
 # USERNAME = 'admin'
@@ -34,8 +35,10 @@ DEBUG = True
 USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
 PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
 SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
-PORT = '17236'  # A porta fornecida pelo ngrok
+PORT = '10500'  # A porta fornecida pelo ngrok
 DB = 'db_sard'
+
+
 # Atualize a URI de conexão com o endereço do ngrok e a porta correta
 #SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DB}'
 SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DB}'
