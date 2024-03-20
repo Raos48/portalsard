@@ -34,7 +34,7 @@ DEBUG = True
 USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
 PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
 SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
-PORT = '13011'  # A porta fornecida pelo ngrok
+PORT = '17236'  # A porta fornecida pelo ngrok
 DB = 'db_sard'
 # Atualize a URI de conexão com o endereço do ngrok e a porta correta
 #SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DB}'

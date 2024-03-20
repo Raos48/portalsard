@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Atualização link banco de Dados 14:34" />
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Atualização link banco de Dados 14:36">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -249,7 +251,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710783193344</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Atualização link banco de Dados 14:36">
+      <option name="closed" value="true" />
+      <created>1710783383929</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1710783383929</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -281,6 +291,7 @@
     <MESSAGE value="Ajuste Template de Erro de Conexão com o Banco de Dados - Melhorias visuais" />
     <MESSAGE value="Atualização link banco de Dados" />
     <MESSAGE value="Atualização link banco de Dados 14:33" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização link banco de Dados 14:33" />
+    <MESSAGE value="Atualização link banco de Dados 14:36" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualização link banco de Dados 14:36" />
   </component>
 </project>
