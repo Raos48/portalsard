@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, jsonify, request
 from flask_login import login_user, current_user, logout_user, login_required
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from urllib.parse import quote_plus
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, DataError
 from sqlalchemy import func, or_
@@ -11,6 +11,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, render_template, redirect, url_for
 import plotly.graph_objs as go
 from sqlalchemy.exc import OperationalError
+import pytz
+
+sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
+
 
 #Atualização
 
@@ -122,7 +126,7 @@ def registrar():
         matricula = request.form['matricula']
         unidade = request.form['unidade']
         especie = request.form['especie']
-        dt_solicitacao = datetime.now()
+        dt_solicitacao = datetime.now(pytz.utc)
 
         protocolo = int(protocolo) if protocolo.isdigit() else None
 
