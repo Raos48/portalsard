@@ -39,7 +39,7 @@ DEBUG = True
 USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
 PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
 SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
-PORT = '10500'  # A porta fornecida pelo ngrok
+PORT = '11034'  # A porta fornecida pelo ngrok
 DB = 'db_sard'
 
 

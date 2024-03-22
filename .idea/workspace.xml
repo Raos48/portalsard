@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Atualização link banco de Dados 20/03/ 18:27">
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Atualização pytz.utc">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/headers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/headers.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,7 +276,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710970189153</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Atualização pytz.utc">
+      <option name="closed" value="true" />
+      <created>1710979427003</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1710979427003</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -311,6 +319,7 @@
     <MESSAGE value="Atualização link banco de Dados 14:36" />
     <MESSAGE value="Atualização link banco de Dados 20/03/ 12:51" />
     <MESSAGE value="Atualização link banco de Dados 20/03/ 18:27" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização link banco de Dados 20/03/ 18:27" />
+    <MESSAGE value="Atualização pytz.utc" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualização pytz.utc" />
   </component>
 </project>
