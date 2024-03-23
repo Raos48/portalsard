@@ -19,13 +19,13 @@ sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 #Atualização
 
 #conexão local
-DEBUG = True
-USERNAME = 'root'
-PASSWORD = 'root'
-SERVER = 'localhost'
-DB = 'db_sard'
-PORT = '3306'
-SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
+# DEBUG = True
+# USERNAME = 'root'
+# PASSWORD = 'root'
+# SERVER = 'localhost'
+# DB = 'db_sard'
+# PORT = '3306'
+# SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
 
 #conexão RDS
 # USERNAME = 'admin'
@@ -35,12 +35,21 @@ SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
 # SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
 
 #CONEXÃO NGROK
+# DEBUG = True
+# USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
+# PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
+# SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
+# PORT = '11034'  # A porta fornecida pelo ngrok
+# DB = 'db_sard'
+
 DEBUG = True
-USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
-PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
-SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
-PORT = '11034'  # A porta fornecida pelo ngrok
-DB = 'db_sard'
+
+USERNAME = 'sql10693563'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
+PASSWORD = 'aWpAu6nLnC'  # Substitua 'sua_senha' pela senha do usuário do MySQL
+SERVER = 'sql10.freesqldatabase.com'  # O endereço do ngrok sem o prefixo 'tcp://'
+PORT = '3306'  # A porta fornecida pelo ngrok
+DB = 'sql10693563'
+
 
 
 # Atualize a URI de conexão com o endereço do ngrok e a porta correta
