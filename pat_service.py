@@ -1,6 +1,12 @@
 import os
+
+import pyautogui
+import pyotp
 from selenium import webdriver
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
@@ -13,14 +19,40 @@ import urllib3
 
 #Atualização
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+confidence_level = 0.7
 
 pasta_raiz = os.getcwd()
 headers_file_path = os.path.join(pasta_raiz, 'headers.txt')
 
 class TokenFetcher:
+
     def __init__(self):
         self.setup_driver()
         self.process_tasks()
+
+    def connect_to_database(self):
+        # Atualização das credenciais de conexão
+        USERNAME = 'sql10693563'
+        PASSWORD = 'aWpAu6nLnC'
+        SERVER = 'sql10.freesqldatabase.com'
+        PORT = '3306'
+        DB = 'sql10693563'
+
+        try:
+            connection = mysql.connector.connect(
+                host=SERVER,
+                user=USERNAME,
+                password=PASSWORD,
+                database=DB,
+                port=PORT
+            )
+            return connection
+        except mysql.connector.Error as e:
+            print(f"Erro ao conectar ao banco de dados: {e}")
+            exit()
+
+
+
 
     def setup_driver(self):
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -57,10 +89,38 @@ class TokenFetcher:
                 print()
                 print("Aguardando Login no sistema PAT...")
                 print()
+
+
+                time.sleep(2)
+                pyautogui.click(pyautogui.locateCenterOnScreen("certificado.png", confidence=confidence_level))
+                time.sleep(2)
+                pyautogui.click(pyautogui.locateCenterOnScreen("ok.png", confidence=confidence_level))
+                time.sleep(2)
+                pyautogui.write('Data.4512')
+                time.sleep(1)
+                pyautogui.press('enter')
+                time.sleep(1)
+
+                chave_secreta = 'SCFW2ZRV7FZ4G3YO'
+                totp = pyotp.TOTP(chave_secreta)
+                codigo_totp = totp.now()
+                print(f"Código TOTP: {codigo_totp}")
+
                 time.sleep(3)
+                driver.find_element(By.XPATH,"/html/body/div/div/main/div/div/div/div[2]/form/div/section[2]/input").click()
+                driver.find_element(By.XPATH,"/html/body/div/div/main/div/div/div/div[2]/form/div/section[2]/input").send_keys(codigo_totp)
+                driver.find_element(By.XPATH,"/html/body/div/div/main/div/div/div/div[2]/form/div/section[3]/input").click()
+
+                time.sleep(5)
+                # Supondo que 'driver' seja sua instância do WebDriver
+
+                driver.find_element(By.ID, 'dtpSelectAbrangencia').click()
+                time.sleep(3)
+                driver.find_element(By.XPATH,"/html/body/div/main/div/div/div[2]/section/div/div/div[2]/div/div/div/select/option[9]").click()
+
+
                 wait = WebDriverWait(driver, 120)  # Aguarda até 10 segundos
-                element = wait.until(
-                    EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[2]/div/header/div[1]/span")))
+                element = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[2]/div/header/div[1]/span")))
                 for i in range(30, 0, -1):
                     print(f"Aguardando: {i} segundos")
                     time.sleep(1)
@@ -940,18 +1000,42 @@ class TokenFetcher:
         except Exception as e:
             print(f"Erro: {e}")
 
-    def connect_to_database(self):
-        try:
-            connection = mysql.connector.connect(
-                host='localhost',
-                user='root',
-                password='root',
-                database='db_sard'
-            )
-            return connection
-        except mysql.connector.Error as e:
-            print(f"Erro ao conectar ao banco de dados: {e}")
-            exit()
+    # def connect_to_database(self):
+    #     try:
+    #         connection = mysql.connector.connect(
+    #             host='localhost',
+    #             user='root',
+    #             password='root',
+    #             database='db_sard'
+    #         )
+    #         return connection
+    #     except mysql.connector.Error as e:
+    #         print(f"Erro ao conectar ao banco de dados: {e}")
+    #         exit()
+
+
+# class DatabaseConnection:
+#     def connect_to_database(self):
+#         # Definição das novas credenciais
+#         USERNAME = 'sql10693563'
+#         PASSWORD = 'aWpAu6nLnC'
+#         SERVER = 'sql10.freesqldatabase.com'
+#         PORT = '3306'
+#         DB = 'sql10693563'
+#
+#         try:
+#             connection = mysql.connector.connect(
+#                 host=SERVER,
+#                 user=USERNAME,
+#                 password=PASSWORD,
+#                 database=DB,
+#                 port=PORT
+#             )
+#             return connection
+#         except mysql.connector.Error as e:
+#             print(f"Erro ao conectar ao banco de dados: {e}")
+#             exit()
+
 
 if __name__ == "__main__":
     PATDistributor = TokenFetcher()

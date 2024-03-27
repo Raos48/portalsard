@@ -129,7 +129,7 @@ def show_error_page():
 @app.route('/registrar', methods=['GET', 'POST'])
 def registrar():
     if request.method == 'POST':
-        protocolo = request.form.get('protocolo', '')
+        protocolo = request.form.get('protocolo', '').strip()  # .strip() remove espaços em branco do início e do fim
         solicitante = request.form['solicitante']
         tipo = request.form['tipo']
         matricula = request.form['matricula']
@@ -137,27 +137,27 @@ def registrar():
         especie = request.form['especie']
         dt_solicitacao = datetime.now(pytz.utc)
 
-        protocolo = int(protocolo) if protocolo.isdigit() else None
+        # Verificação adicional para garantir que o protocolo não seja nulo/vazio para "Transferir tarefa"
+        if tipo == "Transferir tarefa" and (protocolo == "" or protocolo is None):
+            flash("O campo protocolo é obrigatório para transferência de tarefa.", category="danger")
+            return jsonify({'success': False, 'message': "O campo protocolo é obrigatório para transferência de tarefa."})
 
-        nova_solicitacao = Solicitacoes(protocolo=protocolo,solicitante=solicitante, tipo=tipo, matricula=matricula, unidade=unidade,especie=especie,dt_solicitacao=dt_solicitacao)
+        nova_solicitacao = Solicitacoes(protocolo=protocolo, solicitante=solicitante, tipo=tipo, matricula=matricula, unidade=unidade, especie=especie, dt_solicitacao=dt_solicitacao)
         db.session.add(nova_solicitacao)
         try:
             db.session.commit()
-            flash(f"Registro Realizado com sucesso!", category="success")
+            flash("Registro Realizado com sucesso!", category="success")
             nova_solicitacao_id = nova_solicitacao.id  # Obtém o ID da nova solicitação
             return jsonify({'success': True, 'id': nova_solicitacao_id})  # Retorna o ID ao frontend
         except Exception as e:
+            db.session.rollback()
             flash("Erro ao realizar o registro.", category="danger")
             return jsonify({'success': False, 'message': str(e)})
-            db.session.rollback()
-            # Trate o erro conforme necessário
-            print(e)
-        return redirect(url_for('registrar'))
 
-    # todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).all()
     todas_solicitacoes = Solicitacoes.query.order_by(Solicitacoes.id.desc()).limit(50).all()
     status_mais_recente = StatusAPI.query.order_by(StatusAPI.id.desc()).first()
-    return render_template('registrar.html', solicitacoes=todas_solicitacoes,status_api=status_mais_recente)
+    return render_template('registrar.html', solicitacoes=todas_solicitacoes, status_api=status_mais_recente)
+
 
 @app.route('/dados-grafico-estoque')
 def dados_grafico_estoque():
