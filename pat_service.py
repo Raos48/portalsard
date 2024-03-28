@@ -263,6 +263,10 @@ class TokenFetcher:
                                 sql_update = "UPDATE solicitacoes SET status = %s WHERE id = %s"
                                 cursor.execute(sql_update, (status, id_solicitacao))
                                 connection.commit()
+
+
+
+
                             elif tipo == "Atribuir responsável":
                                 siape_procurado = matricula
                                 id_responsavel = None

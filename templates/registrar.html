@@ -275,7 +275,11 @@
                     <td>{{ solicitacao.matricula or ''}}</td>
                     <td>{{ solicitacao.unidade or ''}}</td>
                     <td>{{ solicitacao.dt_solicitacao}}</td>
-                    <td>{{ solicitacao.status or ''}}</td>
+                    {% if solicitacao.status %}
+                    <td style="background-color: #d3f9d8;">{{ solicitacao.status }}</td> <!-- Verde suave -->
+                    {% else %}
+                    <td style="background-color: #fff7ae;">Pendente</td> <!-- Amarelo suave -->
+                    {% endif %}
                 </tr>
                 {% endfor %}
                 </tbody>
