@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Atualização link banco de dados freesqldatabase">
-      <change afterPath="$PROJECT_DIR$/certificado.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ok.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ol.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pat.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requeriments.txt" afterDir="false" />
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Alterações visuais na tabela">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chromedriver.exe" beforeDir="false" afterPath="$PROJECT_DIR$/chromedriver.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/headers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/headers.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pat_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/pat_service.py" afterDir="false" />
     </list>
@@ -328,7 +322,23 @@
       <option name="project" value="LOCAL" />
       <updated>1711201514978</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Atualização regras transferência.">
+      <option name="closed" value="true" />
+      <created>1711570686473</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1711570686473</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Alterações visuais na tabela">
+      <option name="closed" value="true" />
+      <created>1711629981675</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1711629981675</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -366,27 +376,8 @@
     <MESSAGE value="Atualização pytz.utc" />
     <MESSAGE value="Atualização Do link de conexão queda de energia." />
     <MESSAGE value="Atualização link banco de dados freesqldatabase" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualização link banco de dados freesqldatabase" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pat_service.py</url>
-          <line>255</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pat_service.py</url>
-          <line>254</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pat_service.py</url>
-          <line>210</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Atualização regras transferência." />
+    <MESSAGE value="Alterações visuais na tabela" />
+    <option name="LAST_COMMIT_MESSAGE" value="Alterações visuais na tabela" />
   </component>
 </project>

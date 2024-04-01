@@ -36,19 +36,19 @@ sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 
 #CONEXÃO NGROK
 # DEBUG = True
-# USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
-# PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
-# SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
-# PORT = '11034'  # A porta fornecida pelo ngrok
-# DB = 'db_sard'
+USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
+PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
+SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
+PORT = '10583'  # A porta fornecida pelo ngrok
+DB = 'db_sard'
 
 DEBUG = True
 
-USERNAME = 'sql10693563'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
-PASSWORD = 'aWpAu6nLnC'  # Substitua 'sua_senha' pela senha do usuário do MySQL
-SERVER = 'sql10.freesqldatabase.com'  # O endereço do ngrok sem o prefixo 'tcp://'
-PORT = '3306'  # A porta fornecida pelo ngrok
-DB = 'sql10693563'
+# USERNAME = 'sql10693563'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
+# PASSWORD = 'aWpAu6nLnC'  # Substitua 'sua_senha' pela senha do usuário do MySQL
+# SERVER = 'sql10.freesqldatabase.com'  # O endereço do ngrok sem o prefixo 'tcp://'
+# PORT = '3306'  # A porta fornecida pelo ngrok
+# DB = 'sql10693563'
 
 
 

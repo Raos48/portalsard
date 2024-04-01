@@ -32,11 +32,21 @@ class TokenFetcher:
 
     def connect_to_database(self):
         # Atualização das credenciais de conexão
-        USERNAME = 'sql10693563'
-        PASSWORD = 'aWpAu6nLnC'
-        SERVER = 'sql10.freesqldatabase.com'
-        PORT = '3306'
-        DB = 'sql10693563'
+        # USERNAME = 'sql10693563'
+        # PASSWORD = 'aWpAu6nLnC'
+        # SERVER = 'sql10.freesqldatabase.com'
+        # PORT = '3306'
+        # DB = 'sql10693563'
+
+        USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
+        PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
+        SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
+        PORT = '10583'  # A porta fornecida pelo ngrok
+        DB = 'db_sard'
+
+
+
+
 
         try:
             connection = mysql.connector.connect(
