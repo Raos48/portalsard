@@ -35,7 +35,7 @@ sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 # SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
 
 #CONEXÃO NGROK
-# DEBUG = True
+DEBUG = True
 USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
 PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
 SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
@@ -129,7 +129,7 @@ def show_error_page():
 @app.route('/registrar', methods=['GET', 'POST'])
 def registrar():
     if request.method == 'POST':
-        protocolo = request.form.get('protocolo', '').strip()  # .strip() remove espaços em branco do início e do fim
+        protocolo = request.form.get('protocolo', '').strip() or None
         solicitante = request.form['solicitante']
         tipo = request.form['tipo']
         matricula = request.form['matricula']

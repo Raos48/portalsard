@@ -591,7 +591,6 @@ class TokenFetcher:
                                         verify=False, headers=self.headers)
                                     if requisicao.status_code != 200:
                                         print(requisicao.text)
-                                        time.sleep(2)
                                         continue
                                     tarefa = requisicao.json()
                                     codigo_unidade = tarefa['codigoUnidade']
@@ -603,7 +602,6 @@ class TokenFetcher:
                                         cursor.execute(sql_update_estoque, (status, protocolo))
                                         connection.commit()
                                         print(f"tarefa já encontra-se{status_tarefa}")
-                                        time.sleep(2)
                                         continue
 
                                     if codigo_unidade == '23150520' or codigo_unidade == '23150513':
@@ -613,7 +611,6 @@ class TokenFetcher:
                                             verify=False, headers=self.headers, data=payload)
                                         if requisicao.status_code != 200:
                                             print(f"Erro na requisição. Código de status: {requisicao.status_code}")
-                                            time.sleep(2)
                                             continue
                                         resposta = requisicao.json()
                                         mensagem = resposta['mensagem']
@@ -776,7 +773,6 @@ class TokenFetcher:
                                         requisicao = requests.get( f'https://vip-pportalspaapr01.inss.prevnet/apis/tarefasApi/tarefas/{protocolo}',verify=False, headers=self.headers)
                                         if requisicao.status_code != 200:
                                             print(requisicao.text)
-                                            time.sleep(2)
                                             continue
                                         tarefa = requisicao.json()
                                         codigo_unidade = tarefa['codigoUnidade']
@@ -788,7 +784,6 @@ class TokenFetcher:
                                             cursor.execute(sql_update_estoque, (status, protocolo))
                                             connection.commit()
                                             print(f"tarefa já encontra-se{status_tarefa}")
-                                            time.sleep(2)
                                             continue
 
                                         if codigo_unidade == '23150520' or codigo_unidade == '23150513':
@@ -798,7 +793,6 @@ class TokenFetcher:
                                                 verify=False, headers=self.headers, data=payload)
                                             if requisicao.status_code != 200:
                                                 print(f"Erro na requisição. Código de status: {requisicao.status_code}")
-                                                time.sleep(2)
                                                 continue
                                             resposta = requisicao.json()
                                             mensagem = resposta['mensagem']
@@ -925,7 +919,6 @@ class TokenFetcher:
                                         verify=False, headers=self.headers)
                                     if requisicao.status_code != 200:
                                         print(requisicao.text)
-                                        time.sleep(2)
                                         continue
                                     tarefa = requisicao.json()
                                     codigo_unidade = tarefa['codigoUnidade']
@@ -937,7 +930,6 @@ class TokenFetcher:
                                         cursor.execute(sql_update_instrucao, (status, protocolo))
                                         connection.commit()
                                         print(f"tarefa já encontra-se{status_tarefa}")
-                                        time.sleep(2)
                                         continue
 
                                     if codigo_unidade == '23150520' or codigo_unidade == '23150513':
