@@ -1,19 +1,17 @@
-from flask import render_template, flash, redirect, url_for, jsonify, request
-from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote_plus
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError, DataError
-from sqlalchemy import func, or_
-import pandas as pd
-from flask_migrate import Migrate
-from flask import Flask, render_template, request, redirect, url_for
+import os
+
+from flask import Flask, render_template, flash, redirect, url_for, jsonify, request
+from flask_login import login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, request, render_template, redirect, url_for
+from flask_migrate import Migrate
+from sqlalchemy import func, or_
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError, DataError, OperationalError
+import pandas as pd
 import plotly.graph_objs as go
-from sqlalchemy.exc import OperationalError
 import pytz
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
