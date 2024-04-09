@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="ALteração de código ngrok 08:57">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="ALteração de código hostinger 02:31">
+      <change afterPath="$PROJECT_DIR$/requirements_bkp.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bkp.py" beforeDir="false" afterPath="$PROJECT_DIR$/bkp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/headers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/headers.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pat_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/pat_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requeriments.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requeriments.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -369,7 +366,23 @@
       <option name="project" value="LOCAL" />
       <updated>1712264629749</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="ALteração de código ngrok 02:31">
+      <option name="closed" value="true" />
+      <created>1712640749052</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1712640749052</updated>
+    </task>
+    <task id="LOCAL-00033" summary="ALteração de código hostinger 02:31">
+      <option name="closed" value="true" />
+      <created>1712640841137</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1712640841137</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -385,8 +398,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Commit para Render" />
-    <MESSAGE value="Instalação Gunicor e atualização requeriments.txt" />
     <MESSAGE value="Exclusão biblioteca idna" />
     <MESSAGE value="Remoção da biblioteca urllib3==1.25.11 do requeriments.txt" />
     <MESSAGE value="Alteração do selenium 4.0 para Selenium 3.141.0" />
@@ -410,6 +421,8 @@
     <MESSAGE value="Alterações visuais na tabela" />
     <MESSAGE value="Update link de acesso retornando ngrok" />
     <MESSAGE value="ALteração de código ngrok 08:57" />
-    <option name="LAST_COMMIT_MESSAGE" value="ALteração de código ngrok 08:57" />
+    <MESSAGE value="ALteração de código ngrok 02:31" />
+    <MESSAGE value="ALteração de código hostinger 02:31" />
+    <option name="LAST_COMMIT_MESSAGE" value="ALteração de código hostinger 02:31" />
   </component>
 </project>
