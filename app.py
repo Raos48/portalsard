@@ -8,7 +8,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import func, or_
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError, DataError, OperationalError
-import pandas as pd
 import plotly.graph_objs as go
 import pytz
 from dotenv import load_dotenv
@@ -20,7 +19,7 @@ load_dotenv()
 sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 
 
-#Atualização
+
 
 #conexão local
 # DEBUG = True
