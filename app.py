@@ -12,6 +12,12 @@ from flask import Flask, request, render_template, redirect, url_for
 import plotly.graph_objs as go
 from sqlalchemy.exc import OperationalError
 import pytz
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+
 
 sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 
@@ -34,15 +40,13 @@ sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 # DB = 'rds_sard'
 # SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}/{DB}'
 
-#CONEXÃO NGROK
-DEBUG = True
-USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
-PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
-SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
-PORT = '15551'  # A porta fornecida pelo ngrok
-DB = 'db_sard'
-
-DEBUG = True
+# #CONEXÃO NGROK
+# DEBUG = True
+# USERNAME = 'root'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
+# PASSWORD = 'root'  # Substitua 'sua_senha' pela senha do usuário do MySQL
+# SERVER = '0.tcp.sa.ngrok.io'  # O endereço do ngrok sem o prefixo 'tcp://'
+# PORT = '15551'  # A porta fornecida pelo ngrok
+# DB = 'db_sard'
 
 # USERNAME = 'sql10693563'  # Assegure-se de que 'root' é permitido conectar-se do ngrok
 # PASSWORD = 'aWpAu6nLnC'  # Substitua 'sua_senha' pela senha do usuário do MySQL
@@ -50,13 +54,30 @@ DEBUG = True
 # PORT = '3306'  # A porta fornecida pelo ngrok
 # DB = 'sql10693563'
 
+# USERNAME = 'u122853113_root'
+# PASSWORD = 'Bola@4512'
+# SERVER = 'srv893.hstgr.io:3306'
+# DB = 'u122853113_raos_database'
+
+# Acessa as variáveis de ambiente
+DEBUG = os.getenv("DEBUG")
+USER = os.getenv("USER")
+PASSWORD = os.getenv("PASSWORD")
+SERVER = os.getenv("SERVER")
+DB = os.getenv("DB")
+
+print("DEBUG:", DEBUG)
+print("USER:", USER)
+print("PASSWORD:", PASSWORD)
+print("SERVER:", SERVER)
+print("DB:", DB)
+
+SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USER}:{quote_plus(PASSWORD)}@{SERVER}/{DB}'
+
 
 
 # Atualize a URI de conexão com o endereço do ngrok e a porta correta
 #SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DB}'
-SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DB}'
-
-
 
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 SECRET_KEY = "5516500a750bfc88c0832fab"

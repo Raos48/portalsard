@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="Alterações visuais na tabela">
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="ALteração de código ngrok 08:57">
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bkp.py" beforeDir="false" afterPath="$PROJECT_DIR$/bkp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/headers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/headers.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pat_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/pat_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requeriments.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,21 +59,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.app.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.connection_cext.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.pat_service.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.teste.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ricardo/OneDrive - INSS/PYTHON/AdminLTE/django-adminlte&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.app.executor": "Debug",
+    "Python.bkp.executor": "Debug",
+    "Python.connection_cext.executor": "Debug",
+    "Python.pat_service.executor": "Debug",
+    "Python.ssl.executor": "Debug",
+    "Python.teste.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Ricardo/OneDrive - INSS/PYTHON/AdminLTE/django-adminlte",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\PYTHON2\portal_sard_gex_anp" />
@@ -338,7 +345,31 @@
       <option name="project" value="LOCAL" />
       <updated>1711629981675</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Update link de acesso retornando ngrok">
+      <option name="closed" value="true" />
+      <created>1711966488061</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1711966488061</updated>
+    </task>
+    <task id="LOCAL-00030" summary="ALteração de código ngrok 08:57">
+      <option name="closed" value="true" />
+      <created>1711972691285</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1711972691285</updated>
+    </task>
+    <task id="LOCAL-00031" summary="ALteração de código ngrok 08:57">
+      <option name="closed" value="true" />
+      <created>1712264629749</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1712264629749</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -354,7 +385,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Commit para PythonAnywhere" />
     <MESSAGE value="Commit para Render" />
     <MESSAGE value="Instalação Gunicor e atualização requeriments.txt" />
     <MESSAGE value="Exclusão biblioteca idna" />
@@ -378,6 +408,8 @@
     <MESSAGE value="Atualização link banco de dados freesqldatabase" />
     <MESSAGE value="Atualização regras transferência." />
     <MESSAGE value="Alterações visuais na tabela" />
-    <option name="LAST_COMMIT_MESSAGE" value="Alterações visuais na tabela" />
+    <MESSAGE value="Update link de acesso retornando ngrok" />
+    <MESSAGE value="ALteração de código ngrok 08:57" />
+    <option name="LAST_COMMIT_MESSAGE" value="ALteração de código ngrok 08:57" />
   </component>
 </project>
