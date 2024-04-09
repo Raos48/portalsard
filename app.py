@@ -51,23 +51,23 @@ sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 # PORT = '3306'  # A porta fornecida pelo ngrok
 # DB = 'sql10693563'
 
-# USERNAME = 'u122853113_root'
-# PASSWORD = 'Bola@4512'
-# SERVER = 'srv893.hstgr.io:3306'
-# DB = 'u122853113_raos_database'
+USER = 'u122853113_root'
+PASSWORD = 'Bola@4512'
+SERVER = 'srv893.hstgr.io:3306'
+DB = 'u122853113_raos_database'
 
 # Acessa as variáveis de ambiente
-DEBUG = os.getenv("DEBUG")
-USER = os.getenv("USER")
-PASSWORD = os.getenv("PASSWORD")
-SERVER = os.getenv("SERVER")
-DB = os.getenv("DB")
-
-print("DEBUG:", DEBUG)
-print("USER:", USER)
-print("PASSWORD:", PASSWORD)
-print("SERVER:", SERVER)
-print("DB:", DB)
+# DEBUG = os.getenv("DEBUG")
+# USER = os.getenv("USER")
+# PASSWORD = os.getenv("PASSWORD")
+# SERVER = os.getenv("SERVER")
+# DB = os.getenv("DB")
+#
+# print("DEBUG:", DEBUG)
+# print("USER:", USER)
+# print("PASSWORD:", PASSWORD)
+# print("SERVER:", SERVER)
+# print("DB:", DB)
 
 SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USER}:{quote_plus(PASSWORD)}@{SERVER}/{DB}'
 
