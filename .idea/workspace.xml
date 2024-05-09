@@ -4,14 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="ALteração de código hostinger requirements ajust">
+    <list default="true" id="e174aba9-d384-45dc-8877-139196afbc6d" name="Changes" comment="ALteração de código tentativa novo SEM VARIAVEIS AMBIENTE">
       <change afterPath="$PROJECT_DIR$/requirements_bkp.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testeemail.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bkp.py" beforeDir="false" afterPath="$PROJECT_DIR$/bkp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/headers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/headers.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pat_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/pat_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registrar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registrar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teste.py" beforeDir="false" afterPath="$PROJECT_DIR$/teste.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,12 +30,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Raos48"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Raos48&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -57,23 +58,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.app.executor": "Debug",
-    "Python.bkp.executor": "Debug",
-    "Python.connection_cext.executor": "Debug",
-    "Python.pat_service.executor": "Debug",
-    "Python.ssl.executor": "Debug",
-    "Python.teste.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Ricardo/OneDrive - INSS/PYTHON/AdminLTE/django-adminlte",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.app.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.bkp.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.connection_cext.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.pat_service.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.ssl.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.teste.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.testeemail.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/PYTHON2/portal_sard_gex_anp&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\PYTHON2\portal_sard_gex_anp" />
@@ -399,7 +401,23 @@
       <option name="project" value="LOCAL" />
       <updated>1712642119052</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="ALteração de código tentativa novo deploy">
+      <option name="closed" value="true" />
+      <created>1712660854901</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1712660854901</updated>
+    </task>
+    <task id="LOCAL-00037" summary="ALteração de código tentativa novo SEM VARIAVEIS AMBIENTE">
+      <option name="closed" value="true" />
+      <created>1712662479135</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1712662479135</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -415,8 +433,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Remoção da biblioteca urllib3==1.25.11 do requeriments.txt" />
-    <MESSAGE value="Alteração do selenium 4.0 para Selenium 3.141.0" />
     <MESSAGE value="Alteração Link conexão banco de dados para NGROK" />
     <MESSAGE value="Trata-se de atualização LAYOUT - registrar.html graficos lado a lado fixos" />
     <MESSAGE value="Atualização de Layout e Script do Grafico" />
@@ -440,6 +456,19 @@
     <MESSAGE value="ALteração de código ngrok 02:31" />
     <MESSAGE value="ALteração de código hostinger 02:31" />
     <MESSAGE value="ALteração de código hostinger requirements ajust" />
-    <option name="LAST_COMMIT_MESSAGE" value="ALteração de código hostinger requirements ajust" />
+    <MESSAGE value="ALteração de código tentativa novo deploy" />
+    <MESSAGE value="ALteração de código tentativa novo SEM VARIAVEIS AMBIENTE" />
+    <option name="LAST_COMMIT_MESSAGE" value="ALteração de código tentativa novo SEM VARIAVEIS AMBIENTE" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pat_service.py</url>
+          <line>1381</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
