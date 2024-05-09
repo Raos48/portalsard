@@ -71,7 +71,7 @@ DB = 'u122853113_raos_database'
 
 SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USER}:{quote_plus(PASSWORD)}@{SERVER}/{DB}'
 
-
+#teste
 
 # Atualize a URI de conexão com o endereço do ngrok e a porta correta
 #SQLALCHEMY_DATABASE_URI = f'mysql://{USERNAME}:{PASSWORD}@{SERVER}:{PORT}/{DB}'
